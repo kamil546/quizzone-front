@@ -1,0 +1,19 @@
+{
+  "name": "quizzone-frontend",
+  "version": "1.0.0",
+  "description": "Interaktywna aplikacja quizowa, ktora laczy nauke z rozrywka. Szeroka gama kategorii i pytań sprawi, że każdy znajdzie coś dla siebie. Podejmij wyzwanie, zdobywaj punkty i awansuj w rankingach! Idealna dla tych, którzy chcą uczyć się w formie zabawy.",
+  "main": "index.js",
+  "repository": "https://github.com/MarNow01/quizzone",
+  "author": "KAMM",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "fetch": "^1.1.0",
+    "node-fetch": "^3.3.2",
+    "yarn": "^1.22.22"
+  }
+}
