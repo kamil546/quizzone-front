@@ -5,66 +5,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quizzone - Logowanie</title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="/css/main.css"/>
 </head>
 <body style="zoom:0.95;">
+
 <div id="ovl">
-    <div id="tile-bg">
-
-        <div class="tile-center">
-            <div id="logo"><div id="logo-sygnet"><img src="/img/logo2.png" alt="logo"/></div></div>
-            <div id="bg-header">
-                <div id="bg-header-main">QUIZZONE - Łam zagadki, zdobywaj szczyty!!</div>
-                <div id="bg-header-sub">
-                    <div id="bg-header-sub-ico">
-                        <img src="/img/grafika1.png" alt="grafika1"/>
+    <div id="ovl-top">
+        <div id="top-menu">
+            <div style="padding-bottom: 0!important;" class="logo"><div class="logo-sygnet"><img src="/img/logo2.png" alt="logo"></div></div>
+        </div>
+    </div>
+    <div id="ovl-cat">
+        <div id="tile-bg">
+            <div class="tile-center">
+                <div class="logo"><div class="logo-sygnet"><img src="/img/logo2.png" alt="logo"/></div></div>
+                <div id="bg-header">
+                    <div id="bg-header-main">QUIZZONE - Łam zagadki, zdobywaj szczyty!!</div>
+                    <div id="bg-header-sub">
+                        <div id="bg-header-sub-ico">
+                            <img src="/img/grafika1.png" alt="grafika1"/>
+                        </div>
+                        <div id="bg-header-sub-text">
+                            Zanurz się w świecie quizów, testuj swoje umiejętności, zdobywaj punkty i baw się!
+                        </div>
                     </div>
-                    <div id="bg-header-sub-text">
-                        Zanurz się w świecie quizów, testuj swoje umiejętności, zdobywaj punkty i baw się!
+                </div>
+                <div id="tile-widget">
+                    <div class="widget-item" style="border-right: 3px dotted #f9f6f3;">
+                        <div class="widget-ico"><div><i class='bx bx-basketball' ></i></div></div>
+                        <div class="widget-item-text">
+                            <div class="widget-item-head">Rywalizacja</div>
+                            <div class="widget-item-desc">Tryby gry 1v1</div>
+                        </div>
+                    </div>
+                    <div class="widget-item">
+                        <div class="widget-ico"><div><i class='bx bx-diamond'></i></div></div>
+                        <div class="widget-item-text">
+                            <div class="widget-item-head">Personalizacja</div>
+                            <div class="widget-item-desc">do wygody</div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div id="tile-widget">
-                <div class="widget-item" style="border-right: 3px dotted #f9f6f3;">
-                    <div class="widget-ico"><div><i class='bx bx-basketball' ></i></div></div>
-                    <div class="widget-item-text">
-                        <div class="widget-item-head">Rywalizacja</div>
-                        <div class="widget-item-desc">Tryby gry 1v1</div>
+            <img id="bgt" src="/img/tlo6.png" alt="tlo"/>
+        </div>
+        <div id="content-tile">
+            <div class="tile-center-1">
+                <div class="header-text"><img alt='obrazek' src="/img/grafika3.png"/>Zaloguj do aplikacji</div>
+                <div id="form">
+                    <form method="post" id="loginForm">
+                        <label><div class="text-input">Login</div><input type="text" name="login" id="login"/></label>
+                        <label><div class="text-input">Haslo</div><input type="password" name="login" id="password"/></label>
+    
+                       <input type="submit" value="Zaloguj się"/>
+                       <div class="form-post-info"></div>
+                       <div class="form-info" style="font-style: italic;color: var(--gray1);">
+                        Nie masz konta? <a href="/register">zarejestruj się</a>
                     </div>
-                </div>
-                <div class="widget-item">
-                    <div class="widget-ico"><div><i class='bx bx-diamond'></i></div></div>
-                    <div class="widget-item-text">
-                        <div class="widget-item-head">Personalizacja</div>
-                        <div class="widget-item-desc">do wygody</div>
-                    </div>
+                        <div class="form-info">
+                            <div class="form-info-ico" ><i class='bx bxs-bolt'></i></div><div class="form-info-text">aktualna wersja aplikacji 1.0</div>
+                        </div>
+                        <div class="form-info">
+                            <div class="form-info-ico" ><i class='bx bxs-bolt'></i></div><div class="form-info-text">nowy wyglad</div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-        <img id="bgt" src="/img/tlo6.png" alt="tlo"/>
     </div>
-    <div id="content-tile">
-        <div class="tile-center-1">
-            <div class="header-text"><img alt='obrazek' src="/img/grafika3.png"/>Zaloguj do aplikacji</div>
-            <div id="form">
-                <form method="post" id="loginForm">
-                    <label><div class="text-input">Login</div><input type="text" name="login" id="login"/></label>
-                    <label><div class="text-input">Haslo</div><input type="password" name="login" id="password"/></label>
 
-                   <input type="submit" value="Zaloguj się"/>
-                   <div class="form-info" style="font-size: 1.1em;font-style: italic;color: #555;">
-                    Nie masz konta? <a href="/register">zarejestruj się</a>
-                </div>
-                    <div class="form-info">
-                        <div style=" display: flex; padding: 6px; background-color: #fbf5ee; border-radius: 50%; "><i class="bx bx-check" style=" font-weight: bold; color: #ef846a; "></i></div><div style=" color: #222222; "> aktualna wersja aplikacji 1.0</div>
-                    </div>
-                    <div class="form-info">
-                        <div style=" display: flex; padding: 6px; background-color: #fbf5ee; border-radius: 50%; "><i class="bx bx-check" style=" font-weight: bold; color: #ef846a; "></i></div><div style=" color: #222222; ">nowy wyglad</div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 </div>
 
 
@@ -105,9 +115,12 @@ try{
 
         const data = await response.json();
         if (response.ok) {
+            $('.form-post-info').slideUp();
             localStorage.setItem('jwt-token', data.token);
             window.location.href='/dashboard';
         } else {
+            document.querySelector('.form-post-info').innerHTML=`<div class='form-info-text-error'><i class='bx bxs-error'></i> `+data.message+`</div>`;
+            $('.form-post-info').slideDown();
             console.log(data.message); // Informacja o błędzie
         }
 

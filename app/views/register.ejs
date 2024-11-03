@@ -5,14 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quizzone - Rejestracja</title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="/css/main.css"/>
 </head>
 <body style="zoom:0.95;">
 <div id="ovl">
+<div id="ovl-top">
+        <div id="top-menu">
+            <div style="padding-bottom: 0!important;" class="logo"><div class="logo-sygnet"><img src="/img/logo2.png" alt="logo"></div></div>
+        </div>
+</div>
+<div id="ovl-cat">
     <div id="tile-bg">
 
         <div class="tile-center">
-            <div id="logo"><div id="logo-sygnet"><img src="/img/logo2.png" alt="logo"/></div></div>
+            <div class="logo"><div class="logo-sygnet"><img src="/img/logo2.png" alt="logo"/></div></div>
             <div id="bg-header">
                 <div id="bg-header-main">QUIZZONE - Łam zagadki, zdobywaj szczyty!!</div>
                 <div id="bg-header-sub">
@@ -45,25 +52,27 @@
     </div>
     <div id="content-tile">
         <div class="tile-center-1">
-            <div class="header-text"><img alt='obrazek' src="/img/grafika3.png"/>Zarejestruj</div>
+            <div class="header-text"><img alt='obrazek' src="/img/grafika3.png"/>Zarejestruj się</div>
             <div id="form">
                 <form method="post" id="loginForm">
                     <label><div class="text-input">Login</div><input type="text" name="login" id="login"/></label>
                     <label><div class="text-input">Haslo</div><input type="password" name="login" id="password"/></label>
 
                    <input type="submit" value="Zarejestruj się"/>
+                   <div class="form-post-info"></div>
                    <div style='font-size:1.1em;font-style: italic;color: #555;' class="form-info">
                     Masz konto? <a href="/login">zaloguj się</a>
                 </div>
                    <div class="form-info">
-                    <div style=" display: flex; padding: 6px; background-color: #fbf5ee; border-radius: 50%; "><i class="bx bx-check" style=" font-weight: bold; color: #ef846a; "></i></div><div style=" color: #222222; "> aktualna wersja aplikacji 1.0</div>
+                    <div class="form-info-ico"><i class='bx bxs-bolt'></i></i></div><div style=" color: #222222; "> aktualna wersja aplikacji 1.0</div>
                 </div>
                 <div class="form-info">
-                    <div style=" display: flex; padding: 6px; background-color: #fbf5ee; border-radius: 50%; "><i class="bx bx-check" style=" font-weight: bold; color: #ef846a; "></i></div><div style=" color: #222222; ">nowy wyglad</div>
+                    <div class="form-info-ico"><i class='bx bxs-bolt'></i></div><div style=" color: #222222; ">nowy wyglad</div>
                 </div>
                 </form>
             </div>
         </div>
+    </div>
     </div>
 </div>
 
@@ -105,11 +114,14 @@ try{
 
         const data = await response.json();
         if (response.ok) {
+            $('.form-post-info').slideUp();
             localStorage.setItem('jwt-token', data.token);
             localStorage.setItem('status', 'zarejestrowano pomyslnie');
             window.location.href='/dashboard';
         } else {
-            console.log(data.message); // Informacja o błędzie
+            document.querySelector('.form-post-info').innerHTML=`<div class='form-info-text-error'><i class='bx bxs-error'></i> `+data.message+`</div>`;
+            $('.form-post-info').slideDown();
+            console.log(data.message);
         }
 
 }
