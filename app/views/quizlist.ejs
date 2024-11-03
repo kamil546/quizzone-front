@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'/>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <title>Quizzone - Dashboard</title>
+</head>
+<body>
+    <div class="ovl-app">
+         <%- include('components/left-sidebar'); -%>
+        <div class="cat-cnt">
+            <%- include('components/list-quiz'); -%>
+        </div>
+    </div>
+
+        <script>
+            if((localStorage.getItem('jwt-token')==null)||localStorage.getItem('jwt-token')==''){
+                window.location.href='/login';
+            }
+            //ustawianie active w menu
+            
+                document.addEventListener('DOMContentLoaded', async function() {
+                    const token = localStorage.getItem('jwt-token');
+        
+                    document.addEventListener('click',(event)=> {
+                        if(event.target.classList.contains('sidebar-user-logout')||event.target.classList.contains('bx-log-out')){
+                                localStorage.setItem('jwt-token','');
+                                console.log('Wylogowano..');
+                                window.location.href='/login';
+                        }
+                    });        
+                });
+        
+        </script>
+        
+        
+</body>
+</html>

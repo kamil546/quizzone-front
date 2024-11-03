@@ -28,7 +28,9 @@ app.get('/register',(req,res) => {
 app.get('/dashboard',(req,res)=>{
     res.render('dashboard');
 });
-
+app.get('/quizlist',(req,res)=>{
+    res.render('quizlist');
+});
 
 
 

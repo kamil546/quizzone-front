@@ -1,66 +1,155 @@
 <div id="left-sidebar">
-<div id="left-sidebar-content">
-
-
-
-
-<div class="sidebar-top">
-<div class="sidebar-header">
-<div class="logo-cnt">
-    <div class="logo-img"><img src="./img/logo2.png" alt="logo"></div>
-</div>
-<div class="sidebar-options">
-<div class="sidebar-option close-sidebar"><i class="bx bx-arrow-to-left"></i></div>
-</div>
-</div>
-
-<div class="sidebar-menu">
-<div class="sidebar-menu-cnt">
-
-<div class="sidebar-menu-option active-opt">
-<div class="menu-option-ico"><i class='bx bxs-dashboard' ></i></div>
-<div class="menu-option-text">Dashboard</div>
-</div>
-
-<div class="sidebar-menu-option">
-    <div class="menu-option-ico"><i class='bx bx-book-open'></i></div>
-    <div class="menu-option-text">Strefa quizow</div>
-</div>
-
-<div class="sidebar-menu-option">
-    <div class="menu-option-ico"><i class='bx bxs-copy-alt' ></i></div>
-    <div class="menu-option-text">Moje quizy</div>
-</div>
-
-<div class="sidebar-menu-option">
-    <div class="menu-option-ico"><i class='bx bxs-landscape' ></i></div>
-    <div class="menu-option-text">Ranking</div>
-</div>
-<div class="sidebar-menu-option">
-    <div class="menu-option-ico"><i class='bx bxs-cog'></i></div>
-    <div class="menu-option-text">Ustawienia</div>
-</div>
-
-
-
-</div>
-</div>
-</div>
-
-
-
-<div class="sidebar-bottom">
-    <div class="sidebar-bottom-cnt">
-        <div class="bottom-user-ovl">
-            <div class="sidebar-user-avatar"><img src="./img/avatars/1.png" alt="avatar" /></div>
-            <div class="sidebar-user-name">Marson Z..</div>
-            <div title="Wyloguj.." class="sidebar-user-logout"><i class='bx bx-log-out' ></i></div>
+    <div id="left-sidebar-content">
+        <div class="sidebar-top">
+            <div class="sidebar-header">
+                <div class="logo-cnt">
+                    <div class="logo-img">
+                        <img src="./img/logo2.png" alt="logo">
+                    </div>
+                </div>
+                <div class="sidebar-options">
+                    <div class="sidebar-option close-sidebar">
+                        <i class="bx bx-arrow-to-left"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar-menu">
+                <div class="sidebar-menu-cnt">
+                    <div class="sidebar-menu-option" data-option="dashboard">
+                        <a href="/dashboard" class="sidebar-menu-option-link">
+                            <div class="menu-option-ico">
+                                <i class='bx bxs-dashboard'></i>
+                            </div>
+                            <div class="menu-option-text">Dashboard</div>
+                        </a>
+                    </div>
+                    <div class="sidebar-menu-option" data-option="strefa">
+                        <a href="/quizlist" class="sidebar-menu-option-link">
+                            <div class="menu-option-ico">
+                                <i class='bx bxs-book-open'></i>
+                            </div>
+                            <div class="menu-option-text">
+                                Strefa quizów 
+                            </div>
+                        </a>
+                    </div>
+                    <div class="sidebar-menu-option" data-option="moje-quizy">
+                        <a href="/quizlist" class="sidebar-menu-option-link">
+                            <div class="menu-option-ico">
+                                <i class='bx bxs-copy-alt'></i>
+                            </div>
+                            <div class="menu-option-text">
+                                Moje quizy
+                            </div>
+                        </a>
+                    </div>
+                    <div class="sidebar-menu-option" data-option="ranking">
+                        <a href="/quizlist" class="sidebar-menu-option-link">
+                            <div class="menu-option-ico">
+                                <i class='bx bxs-landscape'></i>
+                            </div>
+                            <div class="menu-option-text">
+                                Ranking
+                            </div>
+                        </a>
+                    </div>
+                    <div class="sidebar-menu-option" data-option="ustawiania">
+                        <a href="/quizlist" class="sidebar-menu-option-link">
+                            <div class="menu-option-ico">
+                                <i class='bx bxs-cog'></i>
+                            </div>
+                            <div class="menu-option-text">Ustawienia</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="sidebar-bottom">
+            <div class="sidebar-bottom-cnt">
+                <div class="bottom-user-ovl">
+                    <div class="sidebar-user-avatar">
+                        <img src="./img/avatars/1.png" alt="avatar" />
+                    </div>
+                    <div class="sidebar-user-name">Marson Z..</div>
+                    <div title="Wyloguj.." class="sidebar-user-logout">
+                        <i class='bx bx-log-out'></i>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
+<script>
+    if ((localStorage.getItem('jwt-token') == null) || localStorage.getItem('jwt-token') == '') {
+        window.location.href = '/login';
+    }
 
-</div>
+    document.addEventListener('DOMContentLoaded', async function() {
+        const token = localStorage.getItem('jwt-token');
+        const savedUsername = localStorage.getItem('username');
+
+        const usernameElement = document.querySelector(".sidebar-user-name");
+
+        if (savedUsername) {
+            usernameElement.innerHTML = savedUsername;
+        } else {
+            try {
+                const response = await fetch('http://quizzone.zapto.org:8000/api/user', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user data');
+                }
+
+                const data = await response.json();
+
+                const username = data.user.username;
+                usernameElement.innerHTML = username;
+
+                localStorage.setItem('username', username);
+
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                usernameElement.innerHTML = '<span class="text-danger">Wystąpił błąd podczas pobierania danych użytkownika.</span>';
+            }
+        }
+    });
 
 
-</div>
+    document.addEventListener('click', (event) => {
+        if (event.target.classList.contains('sidebar-user-logout') || event.target.classList.contains('bx-log-out')) {
+            localStorage.setItem('jwt-token', '');
+            localStorage.setItem('username', '');
+            console.log('Wylogowano..');
+            window.location.href = '/login';
+        }
+    });
+    
+    //Dynamiczne zaznaczanie aktywnej podstrony
+    const menuOptions = document.querySelectorAll('.sidebar-menu-option');
+    menuOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            menuOptions.forEach(opt => opt.classList.remove('active-opt'));
+            option.classList.add('active-opt');
+            const selectedOption = option.getAttribute('data-option');
+            localStorage.setItem('activeMenuOption', selectedOption);
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const activeOption = localStorage.getItem('activeMenuOption');
+        if (activeOption) {
+            const optionToActivate = document.querySelector(`.sidebar-menu-option[data-option="${activeOption}"]`);
+            if (optionToActivate) {
+                optionToActivate.classList.add('active-opt');
+            }
+        }
+    });
+
+</script>
