@@ -4,27 +4,177 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="/css/main.css"/>
     <title>Quizzone - Dashboard</title>
+    <script>
+            function load_username(username){
+            const username_el = $('.mainuser-name-nick');
+            if(username!==null||username!=='')username_el.html(username);
+            else return false;
+        }
+
+            function setAvatar(id){
+            const av = $('.mainuser-info-avatar img');
+            const avs = $('.sidebar-user-avatar img');
+            var img_path = '1.png';
+            switch(id){
+                case 1: img_path = '1.png';break;
+                case 2: img_path = '2.png';break;
+                case 3: img_path = '3.png';break;
+                case 4: img_path = '4.png';break;
+                case 5: img_path = '5.png';break;
+                case 6: img_path = '6.png';break;
+                default: img_path = '1.png';
+            }
+            av.attr('src','/img/avatars/'+img_path);
+            avs.attr('src','/img/avatars/'+img_path);
+            
+            return true;
+        }
+
+        function load_stats(data){    
+        const count_won = $('.stats-details-value:eq(0)'),
+        count_highest_score = $('.stats-details-value:eq(1)'),
+        count_correct_answers = $('.stats-details-value:eq(2)'),
+        user_progressbar = $('.progressbar-bar-fill');
+
+
+            if(data.user.profilePicture)count_won.html(data.user.profilePicture);
+            if(data.user.profilePicture)count_highest_score.html(data.user.profilePicture);
+            if(data.user.profilePicture)count_correct_answers.html(data.user.profilePicture);
+            if(data.user.profilePicture)user_progressbar.css({"width":`${data.user.profilePicture*40}%`});
+
+
+            if(load_username(data.user.username)) console.log('set(username) sucess..');
+
+        return true;
+        }   
+
+
+    </script>
 </head>
 <body>
 <div class="ovl-app">
-<%- include('components/left-sidebar'); -%>
+<%- include('components/left-sidebar',{sitename: 'dashboard',username: ''}); -%>
+
 <div class="cat-cnt">
+    <div class="cat-section">
+            <div class="dashboard-top">
+            <div class="quizz-options-cnt">
+                <div class="quizz-option-btn">1v1 Lobby</div>
+                <div class="quizz-option-btn">Start Quiz</div>
+            </div>    
+            <div class="users-cnt">
+                <div class="users-cnt-info"><div class="users-info">+3</div></div>
+                <div class="users-cnt-avatars">
+                    <div class="user-avatar-small"><img src="/img/avatars/1.png" alt="avatar"></div>
+                    <div class="user-avatar-small"><img src="/img/avatars/2.png" alt="avatar"></div>
+                    <div class="user-avatar-small"><img src="/img/avatars/3.png" alt="avatar"></div>
+                </div>
+            </div>
+            </div>
+    </div>
+    <div class="cat-section">
+        <div class="mainuser-info-tile">
+            <div class="mainuser-info-avatar">
+                <img src="/img/avatars/1.png" alt="avatar"/>
+            </div>
+            <div class="mainuser-info-details">
+                <div class="mainuser-details-name">
+                    <div class="mainuser-name-nick">Marson Z..</div>
+                    <div class="mainuser-name-tier">Poczatkujacy, 1 lvl</div>
+                </div>
+                <div class="mainuser-details-progressbar">
+                    <div class="progressbar-text">2100/3000XP</div>
+                    <div class="progressbar-bar">
+                        <div class="progressbar-bar-fill"></div>
+                    </div>
+                </div>
+                <div class="mainuser-details-stats">
+                    <div class="stats-tile">
+                        <div class="stats-ico"><i class='bx bxs-flag-alt'></i></div>
+                        <div class="stats-details">
+                            <div class="stats-details-value">27</div>
+                            <div class="stats-details-title">Wygranych</div>
+                        </div>
+                    </div>
+                    <div class="stats-tile">
+                        <div class="stats-ico"><i class='bx bxs-trophy'></i></div>
+                        <div class="stats-details">
+                            <div class="stats-details-value">910</div>
+                            <div class="stats-details-title">Najwyzszy wynik</div>
+                        </div>
+                    </div>
+                    <div class="stats-tile">
+                        <div class="stats-ico"><i class='bx bxs-check-circle' ></i></div>
+                        <div class="stats-details">
+                            <div class="stats-details-value">115</div>
+                            <div class="stats-details-title">Poprawnych odpowiedzi</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="cat-section">
+        <div class="cat-section-row">
+
+
+            <div class="mainuser-dashboard-widget">
+                <div class="dashboard-widget-top">
+                    <div class="widget-top-title">Proponowane</div>
+                    <div class="widget-top-progressbar">
+                        <div class="widget-progressbar-text">1/100</div>
+                        <div class="widget-progressbar-bar">
+                            <div class="widget-progressbar-bar-fill"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-widget-cnt">
+                    <div class="widget-cnt-inside">
+                     //LISTA QUIZZOW   
+                    </div>
+                    <div class="widget-cnt-footer">Wyświetl więcej</div>
+                </div>
+            </div>
+            <div class="mainuser-dashboard-widget">
+                <div class="dashboard-widget-top">
+                    <div class="widget-top-title">Osiagniecia</div>
+                    <div class="widget-top-progressbar">
+                        <div class="widget-progressbar-text">2/10</div>
+                        <div class="widget-progressbar-bar">
+                            <div class="widget-progressbar-bar-fill"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-widget-cnt">
+                    <div class="widget-cnt-inside">
+                     //LISTA OSIAGNIEC  
+                    </div>
+                    <div class="widget-cnt-footer">Wyświetl więcej</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
 </div>
+
 </div>
 
     <script>
+        $('.cat-cnt').css({'display':'none'});
         if((localStorage.getItem('jwt-token')==null)||localStorage.getItem('jwt-token')==''){
             window.location.href='/login';
         }
+
+
         
         document.addEventListener('DOMContentLoaded', async function() {
-            if(localStorage.getItem('status')!==""||localStorage.getItem('status')!==null){
-                document.querySelector('#gc1').innerHTML+=localStorage.getItem('status');
-                localStorage.setItem('status','');
-            }
+
+
             const token = localStorage.getItem('jwt-token');
             try {
                 const response = await fetch('http://quizzone.zapto.org:8000/api/user', {
@@ -34,14 +184,28 @@
                         'Authorization': `Bearer ${token}`
                     }
                 });
-    
                 if (!response.ok) {
                     throw new Error('Failed to fetch quizzes');
                 }
                 
                 const data = await response.json();
-                const quizList = document.getElementById('quizList');
-                quizList.innerHTML=data.username;
+                localStorage.setItem('user-data',JSON.stringify(data.user));
+
+                if(setAvatar(data.user.profilePicture))console.log('Ustawiono zdjecie profilowe');
+                else console.log('nima');
+
+
+                if(await load_stats(data)){
+                    console.log('zaladowano statystyki konta..');
+                    $('.cat-cnt').show();
+                }
+                else{
+                    $('.cat-cnt').show();
+                    console.log('nie zaladowano..');
+                }
+
+
+
 
             } catch (error) {
                 console.error('Error fetching quizzes:', error);

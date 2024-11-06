@@ -17,29 +17,45 @@
 <div class="sidebar-menu">
 <div class="sidebar-menu-cnt">
 
-<div class="sidebar-menu-option active-opt">
-<div class="menu-option-ico"><i class='bx bxs-dashboard' ></i></div>
-<div class="menu-option-text">Dashboard</div>
-</div>
+<a href="/dashboard">
+    <div class="sidebar-menu-option active-opt" data-option="dashboard">
+        <div class="menu-option-ico"><i class='bx bxs-dashboard' ></i></div>
+        <div class="menu-option-text">Dashboard</div>
+    </div>
+</a>
 
-<div class="sidebar-menu-option">
-    <div class="menu-option-ico"><i class='bx bx-book-open'></i></div>
-    <div class="menu-option-text">Strefa quizow</div>
-</div>
 
-<div class="sidebar-menu-option">
-    <div class="menu-option-ico"><i class='bx bxs-copy-alt' ></i></div>
-    <div class="menu-option-text">Moje quizy</div>
-</div>
+<a href="/quizzes">
+    <div class="sidebar-menu-option" data-option="quizzes">
+        <div class="menu-option-ico"><i class='bx bx-book-open'></i></div>
+        <div class="menu-option-text">Strefa quizow</div>
+    </div>
+</a>
 
-<div class="sidebar-menu-option">
-    <div class="menu-option-ico"><i class='bx bxs-landscape' ></i></div>
-    <div class="menu-option-text">Ranking</div>
-</div>
-<div class="sidebar-menu-option">
-    <div class="menu-option-ico"><i class='bx bxs-cog'></i></div>
-    <div class="menu-option-text">Ustawienia</div>
-</div>
+
+<a href="/my-quizzes">
+    <div class="sidebar-menu-option" data-option="my-quizzes">
+        <div class="menu-option-ico"><i class='bx bxs-copy-alt' ></i></div>
+        <div class="menu-option-text">Moje quizy</div>
+    </div>
+</a>
+
+
+<a href="/rank">
+    <div class="sidebar-menu-option" data-option="rank">
+        <div class="menu-option-ico"><i class='bx bxs-landscape' ></i></div>
+        <div class="menu-option-text">Ranking</div>
+    </div>
+</a>
+
+
+<a href="/settings">
+    <div class="sidebar-menu-option" data-option="settings">
+        <div class="menu-option-ico"><i class='bx bxs-cog'></i></div>
+        <div class="menu-option-text">Ustawienia</div>
+    </div>
+</a>
+
 
 
 
@@ -53,7 +69,7 @@
     <div class="sidebar-bottom-cnt">
         <div class="bottom-user-ovl">
             <div class="sidebar-user-avatar"><img src="./img/avatars/1.png" alt="avatar" /></div>
-            <div class="sidebar-user-name">Marson Z..</div>
+            <div class="sidebar-user-name"><%= username %></div>
             <div title="Wyloguj.." class="sidebar-user-logout"><i class='bx bx-log-out' ></i></div>
         </div>
     </div>
@@ -64,3 +80,70 @@
 
 
 </div>
+
+
+<script>
+    if ((localStorage.getItem('jwt-token') == null) || localStorage.getItem('jwt-token') == '') {
+        window.location.href = '/login';
+    }
+    document.addEventListener('DOMContentLoaded', async function() {
+        const token = localStorage.getItem('jwt-token');
+        var savedUserdata = localStorage.getItem('user-data');
+        const usernameElement = document.querySelector(".sidebar-user-name");
+        if (savedUserdata) {
+            savedUserdata = JSON.parse(savedUserdata);
+            usernameElement.innerHTML = savedUserdata.username;
+        } else {
+            try {
+                const response = await fetch('http://quizzone.zapto.org:8000/api/user', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user data');
+                }
+                const data = await response.json();
+                const userdata = data.user;
+                usernameElement.innerHTML = userdata.username;
+                localStorage.setItem('user-data', JSON.stringify(userdata));
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                usernameElement.innerHTML = '<span class="text-danger">Wystąpił błąd podczas pobierania danych użytkownika.</span>';
+            }
+        }
+
+    });
+
+
+    document.addEventListener('click', (event) => {
+        if (event.target.classList.contains('sidebar-user-logout') || event.target.classList.contains('bx-log-out')) {
+            localStorage.setItem('jwt-token', '');
+            localStorage.setItem('user-data', '');
+            console.log('Wylogowano..');
+            window.location.href = '/login';
+        }
+    });
+    
+    //Dynamiczne zaznaczanie aktywnej podstrony
+    const menuOptions = document.querySelectorAll('.sidebar-menu-option');
+    menuOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            menuOptions.forEach(opt => opt.classList.remove('active-opt'));
+            option.classList.add('active-opt');
+            const selectedOption = option.getAttribute('data-option');
+            localStorage.setItem('activeMenuOption', selectedOption);
+        });
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+        const activeOption = localStorage.getItem('activeMenuOption');
+        if (activeOption) {
+            const optionToActivate = document.querySelector(`.sidebar-menu-option[data-option="${activeOption}"]`);
+            if (optionToActivate) {
+                optionToActivate.classList.add('active-opt');
+            }
+        }
+    });
+</script>

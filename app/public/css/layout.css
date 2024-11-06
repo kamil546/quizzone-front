@@ -3,6 +3,7 @@
     --gray2: #70787f;
     --gray3: #333;
     --gray4: #39364e;
+    --subtext1: #cbd4e9;
     --white1: #fafafa;
     --orange-main:#ef846a;
 }
@@ -26,6 +27,23 @@
     display:flex!important;
 }
 }
+
+
+@media (max-height: 800px){
+.ovl-app{
+    min-height: calc(100vh - 30px)!important;
+    margin: 15px!important;
+    font-size: 0.9em!important;
+}
+.sidebar-top,#left-sidebar-content{
+    gap: 50px!important;
+}
+.sidebar-menu-cnt{
+    gap: 30px!important;
+}
+}
+
+
 
 
 
@@ -52,11 +70,12 @@ body{
     overflow: auto;
 }
 .ovl-app{
+    box-sizing: border-box;
+    margin: 50px auto;
     display: flex;
     flex-direction: row;
-    transform: translateY(30px);
-    height: calc(100vh - 80px);
-    width: clamp(900px, calc(100% - 40px), 1300px);
+    min-height: calc(100vh - 100px);
+    width: clamp(900px, calc(100% - 40px), 1350px);
     background-color: white;
     border: 1px solid #f7f7f7;
     border-radius: 30px;
@@ -134,7 +153,6 @@ body{
     display: flex;
     align-items: stretch;
     flex-direction: column;
-    height: 100%;
     min-height: 100%;
     gap: 20px;
     padding: 35px;
@@ -147,6 +165,7 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    gap: 100px;
     height: 100%;   
 }
 .sidebar-top{
@@ -202,7 +221,7 @@ body{
 }
 .sidebar-bottom{
     width: 100%;
-    padding: 25px 0;    
+    padding: 15px 0;    
 }
 .sidebar-bottom-cnt{
     display: flex;
@@ -233,6 +252,9 @@ body{
     font-size: 1.1em;
     font-weight: bold;
     color: #39364e;    
+    max-height: 1.1em;
+    max-width:100px;
+    overflow:hidden;
 }
 .sidebar-user-logout{
     font-weight: bold;
@@ -244,9 +266,26 @@ body{
     flex-direction: column;
     flex: auto;
     overflow: auto;
-    height: 100%;
+    max-height: calc(100vh - 100px);
     padding: 30px;
-    box-sizing: border-box; 
+    box-sizing: border-box;
+}
+.sidebar-menu-cnt a{
+    text-decoration: none!important;
+    color: unset!important;
 }
 
-
+.cat-section-row{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex: auto;
+    margin-top: 40px;    
+}
+.cat-section{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 5px 0;    
+}

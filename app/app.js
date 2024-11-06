@@ -28,8 +28,12 @@ app.get('/register',(req,res) => {
 app.get('/dashboard',(req,res)=>{
     res.render('dashboard');
 });
-
-
+app.get('/quizzes',(req,res)=>{
+    res.render('quizzes');
+});
+app.get('/my-quizzes',(req,res)=>{
+    res.render('my-quizzes');
+});
 
 
 app.listen(PORT,()=>{

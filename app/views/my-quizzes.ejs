@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'/>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <title>Quizzone - Strefa quizow</title>
+</head>
+<body>
+<div class="ovl-app">
+<%- include('components/left-sidebar',{sitename: 'quizzes',username: ''}); -%>
+<div class="cat-cnt">
+    <div class="cat-section">
+<div class="quizz-search-ovl">
+    <div class="quizz-search-header">
+        <div class="search-slogan">Zarzadzaj swoimi quizami</div>
+        <div class="quizz-search-engine">
+
+        </div>
+    </div>
+
+    <div class="quizz-search-res-ovl">
+        <div class="search-res-top">
+            <div class="search-res-head-text">Moje quizy</div>
+            <div class="search-res-head-options">
+                <div class="res-head-option"></div>
+                <div class="res-head-option"></div>
+            </div>
+        </div>
+        <div class="search-res-cnt">//LISTA QUIZOW</div>
+
+    </div>
+</div>
+
+    </div>
+
+
+
+
+</div>
+</div>
+
+    <script>
+
+
+
+
+        if((localStorage.getItem('jwt-token')==null)||localStorage.getItem('jwt-token')==''){
+            window.location.href='/login';
+        }
+        
+        document.addEventListener('DOMContentLoaded', async function() {
+            const token = localStorage.getItem('jwt-token');
+
+
+            try {
+                const response = await fetch('http://quizzone.zapto.org:8000/api/quizes', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Failed to fetch quizzes');
+                }
+                var html_data=``;
+                const data = await response.json();
+                console.log(data);
+                data.quizes.forEach((quiz)=>{
+                    html_data+=`
+            <div data-option='${quiz.id}' class="quizz-res-tile">
+                <div class="quizz-res-tile-main">
+                    <div class="quizz-main-image">
+                        <div class="quizz-main-imgtext">optional</div><img src="/img/quizz-bg5.png" alt="quizz"/>
+                    </div>
+                    <div class="quizz-main-details">
+                        <div class="quizz-details-top">
+                            <div class="quizz-details-top-category">${quiz.category}</div>
+                            <div class="quizz-details-top-options">
+                                <div class="quizz-details-top-option"><i class="bx bx-hash"></i>${quiz.id}</div>
+                            </div>
+                        </div>
+                        <div class="quizz-details-main">
+                            <div class="quizz-details-main-title">${quiz.name}</div>
+                            <div class="quizz-details-main-tags">
+                                <div class="quizz-details-main-tag">Autorskie <i class='bx bxs-copyright' ></i></div>
+                                <div class="quizz-details-main-tag">Strefa quizow<i class='bx bxs-objects-horizontal-left' ></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="quizz-res-tile-footer">
+                <div class="quizz-footer-author">
+                    <div class="quizz-footer-author-avatar"><img src="/img/avatars/1.png" alt="avatar"/></div>
+                    <div class="quizz-footer-author-details">
+                        <div class="quizz-footer-author-name">Quizzone</div>
+                        <div class="quizz-footer-author-date">${quiz.created.date.split(' ')[0]}</div>
+                    </div>
+                </div>
+                <div class="quizz-footer-options">
+                    <div class="quizz-footer-option1"><i class='bx bxs-edit-alt' ></i> Edytuj</div>
+                    <div style='background-color: #39364e;' class="quizz-footer-option1"><i class='bx bxs-x-circle' ></i> Usun</div>
+                </div>
+                </div>
+            </div>
+                    
+                    `;
+                });
+
+                document.querySelector('.search-res-head-text').innerHTML="Moje quizy";
+                document.querySelector('.search-res-cnt').innerHTML=html_data;
+
+            } catch (error) {
+                console.error('Error fetching quizzes:', error);
+                const quizList = document.querySelector('.search-res-cnt');
+                quizList.innerHTML = '<li class="text-danger">Wystąpił błąd podczas pobierania quizów.</li>'; 
+            }
+
+            
+        });
+
+document.addEventListener('click',(event)=> {
+    if(event.target.classList.contains('sidebar-user-logout')||event.target.classList.contains('bx-log-out')){
+            localStorage.setItem('jwt-token','');
+            console.log('Wylogowano..');
+            window.location.href='/login';
+    }
+});        
+
+
+    </script>
+    
+</body>
+</html>
