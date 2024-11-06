@@ -75,8 +75,46 @@
     </div>
 </div>
 
+<script>
+    if ((localStorage.getItem('jwt-token') == null) || localStorage.getItem('jwt-token') == '') {
+        window.location.href = '/login';
+    }
 
-</div>
+    document.addEventListener('DOMContentLoaded', async function() {
+        const token = localStorage.getItem('jwt-token');
+        const savedUsername = localStorage.getItem('username');
+
+        const usernameElement = document.querySelector(".sidebar-user-name");
+
+        if (savedUsername) {
+            usernameElement.innerHTML = savedUsername;
+        } else {
+            try {
+                const response = await fetch('http://quizzone.zapto.org:8000/api/user', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user data');
+                }
+
+                const data = await response.json();
+
+                const username = data.user.username;
+                usernameElement.innerHTML = username;
+
+                localStorage.setItem('username', username);
+
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                usernameElement.innerHTML = '<span class="text-danger">Wystąpił błąd podczas pobierania danych użytkownika.</span>';
+            }
+        }
+    });
 
 
 </div>

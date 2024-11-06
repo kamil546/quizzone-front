@@ -141,7 +141,7 @@ body{
 .form-info-text{
     color: #222222;
 }
-.active-opt{
+.active-opt a{
     color: var(--orange-main)!important;
 }
 #left-sidebar{
@@ -200,6 +200,11 @@ body{
     color: var(--gray4);
     padding-right: 60px;    
 }
+.sidebar-menu-cnt a{
+    color: var(--gray4);
+    text-decoration: none;
+   
+}
 .sidebar-menu-option{
     display: flex;
     align-items: center;
@@ -208,10 +213,17 @@ body{
     gap: 18px;    
     transition: 0.3s ease;
 }
-.sidebar-menu-option:hover, .sidebar-option:hover, .sidebar-user-logout i:hover{
+.sidebar-menu-option:hover, .sidebar-option:hover, .sidebar-user-logout i:hover, .sidebar-menu-option a:hover{
     transition: .3s ease;
     cursor: pointer;
     color: var(--orange-main)!important;
+}
+.sidebar-menu-option-link{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;   
 }
 .menu-option-ico{
     display: flex;

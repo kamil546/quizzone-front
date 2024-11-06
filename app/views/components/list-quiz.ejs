@@ -1,0 +1,48 @@
+<link rel="stylesheet" href="/css/layout-list.css"/>
+<div id="quizList" class="quiz-list-container">
+
+</div>
+<script>
+    if((localStorage.getItem('jwt-token')==null)||localStorage.getItem('jwt-token')==''){
+        window.location.href='/login';
+    }
+    
+        document.addEventListener('DOMContentLoaded', async function() {
+            const token = localStorage.getItem('jwt-token');
+            try {
+                const response = await fetch('http://quizzone.zapto.org:8000/api/quizes', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Failed to fetch quizzes');
+                }
+                
+                const data = await response.json();
+                const quizList = document.getElementById('quizList');
+                data.quizes.forEach((quiz) => {
+                    quizList.innerHTML += `
+                        <a href="#">
+                        <div class="list-quiz">
+                            <div class="quiz-property quiz-id"><strong>ID:</strong> ${quiz.id}</div>
+                            <div class="quiz-property quiz-name"><strong>Name:</strong> ${quiz.name}</div>
+                            <div class="quiz-property quiz-category"><strong>Category:</strong> ${quiz.category}</div>
+                        </div></a>`;
+                });
+
+
+            } catch (error) {
+                console.error('Error fetching quizzes:', error);
+                const quizList = document.getElementById('quizList');
+                quizList.innerHTML = '<li class="text-danger">Wystąpił błąd podczas pobierania quizów.</li>'; 
+            }
+
+            
+        });    
+
+
+</script>
