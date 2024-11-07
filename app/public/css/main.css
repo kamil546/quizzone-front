@@ -501,7 +501,7 @@ input[type=submit]:hover{
     justify-content: center;
     align-items: center;
     gap: 22px;
-    padding-top: 25px;
+    padding-top: 45px;
     transform: translateY(-30px);
 }
 .search-slogan{
