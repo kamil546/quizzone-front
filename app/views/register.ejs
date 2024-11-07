@@ -116,8 +116,8 @@ try{
         if (response.ok) {
             $('.form-post-info').slideUp();
             localStorage.setItem('jwt-token', data.token);
-            localStorage.setItem('status', 'zarejestrowano pomyslnie');
-            window.location.href='/dashboard';
+            localStorage.setItem('status', 'zarejestrowano pomyslnie, zaloguj się');
+            window.location.href='/login';
         } else {
             document.querySelector('.form-post-info').innerHTML=`<div class='form-info-text-error'><i class='bx bxs-error'></i> `+data.message+`</div>`;
             $('.form-post-info').slideDown();

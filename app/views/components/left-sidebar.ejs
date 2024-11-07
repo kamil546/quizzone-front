@@ -127,23 +127,16 @@
             }
         });
         
+
         //Dynamiczne zaznaczanie aktywnej podstrony
-        const menuOptions = document.querySelectorAll('.sidebar-menu-option');
-        menuOptions.forEach(option => {
-            option.addEventListener('click', () => {
-                menuOptions.forEach(opt => opt.classList.remove('active-opt'));
-                option.classList.add('active-opt');
-                const selectedOption = option.getAttribute('data-option');
-                localStorage.setItem('activeMenuOption', selectedOption);
-            });
+        const menu_opt = document.querySelectorAll('.sidebar-menu-option'),
+        current_path = window.location.pathname.substr(1);
+        menu_opt.forEach((opt) => {
+        opt.classList.remove('active-opt');
+        if(current_path==opt.getAttribute('data-option')){
+            opt.closest('a').classList.add('active-opt');
+            return;
+        }
         });
-        document.addEventListener('DOMContentLoaded', () => {
-            const activeOption = localStorage.getItem('activeMenuOption');
-            if (activeOption) {
-                const optionToActivate = document.querySelector(`.sidebar-menu-option[data-option="${activeOption}"]`);
-                if (optionToActivate) {
-                    optionToActivate.classList.add('active-opt');
-                }
-            }
-        });
+
     </script>

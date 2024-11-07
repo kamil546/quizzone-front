@@ -94,6 +94,18 @@
 
 
 <script>
+
+document.addEventListener('DOMContentLoaded',(e)=>{
+    var status = localStorage.getItem('status');
+    if(status!==''){
+        document.querySelector('.form-post-info').innerHTML=`<div class="form-info-text-info"><i class="bx bxs-error"></i> ${status}</div>`;
+        document.querySelector('.form-post-info').style.display = 'block';
+        console.log(`QZ: Status: ${status}`);
+        localStorage.setItem('status','');
+    }
+});
+
+
 document.querySelector('#loginForm').addEventListener('submit',async (event)=>{
 event.preventDefault();
 

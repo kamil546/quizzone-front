@@ -6,6 +6,7 @@
     --subtext1: #cbd4e9;
     --white1: #fafafa;
     --orange-main:#ef846a;
+    --green: #389171;
 }
 @media (max-width: 950px){
 #ovl{
@@ -49,6 +50,7 @@
 
 
 body{
+    position: relative;
     display: flex;
     min-height: 100vh;
     align-items: center;
@@ -121,6 +123,10 @@ body{
     font-style: italic;
     color: #d63737;
 }
+.form-info-text-info{
+    font-style: italic;
+    color: var(--green);
+}
 .form-info{
     display: flex;
     gap: 10px;
@@ -141,7 +147,7 @@ body{
 .form-info-text{
     color: #222222;
 }
-.active-opt a{
+.active-opt, .active-opt a{
     color: var(--orange-main)!important;
 }
 #left-sidebar{
@@ -201,8 +207,8 @@ body{
     padding-right: 60px;    
 }
 .sidebar-menu-cnt a{
-    color: var(--gray4);
     text-decoration: none;
+    color: unset;
    
 }
 .sidebar-menu-option{
@@ -284,7 +290,7 @@ body{
 }
 .sidebar-menu-cnt a{
     text-decoration: none!important;
-    color: unset!important;
+    color: unset;
 }
 
 .cat-section-row{
@@ -300,4 +306,35 @@ body{
     flex-direction: row;
     align-items: center;
     margin: 5px 0;    
+}
+#notify-cnt{
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;    
+}
+.notify-bar{
+    -webkit-box-shadow: 0px 0px 30px 3px rgba(235, 234, 252, 0.6);
+    -moz-box-shadow: 0px 0px 30px 3px rgba(235, 234, 252, 0.6);
+    box-shadow: 0px 3px 24px 3px rgb(235 234 252 / 60%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 12px 16px;
+    background-color: #6abbff;
+    border: 6px solid #3fa8ff;
+    color: #f9fcff;
+    font-weight: bold;
+    border-radius: 16px 24px 6px 16px;
+    font-size: 1.2em;
+    max-width: 350px;
+    opacity: 0.95;
+}
+.notify-close:hover{
+font-size:1.2em;
+cursor:pointer;
 }
