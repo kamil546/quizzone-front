@@ -55,7 +55,7 @@
 
 
             try {
-                const response = await fetch('http://quizzone.zapto.org:8000/api/quizes', {
+                const response = await fetch('http://quizzone.zapto.org:8000/api/userquizes', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -102,7 +102,7 @@
                 </div>
                 <div class="quizz-footer-options">
                     <div class="quizz-footer-option1"><i class='bx bxs-edit-alt' ></i> Edytuj</div>
-                    <div style='background-color: #39364e;' class="quizz-footer-option1"><i class='bx bxs-x-circle' ></i> Usun</div>
+                    <div style='background-color: #39364e;' class="quizz-footer-option1 button-usun" id='button-usun${quiz.id}'><i class='bx bxs-x-circle' ></i> Usun</div>
                 </div>
                 </div>
             </div>
@@ -127,6 +127,31 @@ document.addEventListener('click',(event)=> {
             localStorage.setItem('jwt-token','');
             console.log('Wylogowano..');
             window.location.href='/login';
+    }
+    if (event.target.classList.contains('button-usun')) {
+        let ids = event.target.id;
+        let id = parseInt(ids.substring(11));
+        const token = localStorage.getItem('jwt-token');
+        (async () => {
+            try {
+                const response = await fetch(`http://quizzone.zapto.org:8000/api/quiz/${id}`, { 
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Nie udało się usunąć');
+                } else {
+                    console.log(`Quiz o ID ${id} został usunięty.`);
+                }
+                window.location.href='/my-quizzes';
+            } catch (error) {
+                console.error('Błąd usuwania:', error);
+            }
+        })(); 
     }
 });        
 

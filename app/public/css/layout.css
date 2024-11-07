@@ -141,7 +141,7 @@ body{
 .form-info-text{
     color: #222222;
 }
-.active-opt a{
+.active-opt {
     color: var(--orange-main)!important;
 }
 #left-sidebar{
