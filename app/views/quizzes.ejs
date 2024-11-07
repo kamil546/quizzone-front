@@ -112,7 +112,7 @@
                 <div class="quizz-footer-author">
                     <div class="quizz-footer-author-avatar"><img src="/img/avatars/1.png" alt="avatar"/></div>
                     <div class="quizz-footer-author-details">
-                        <div class="quizz-footer-author-name">${quiz.author_id.author??'Quizzone'}</div>
+                        <div class="quizz-footer-author-name">${quiz.author_name??'Quizzone'}</div>
                         <div class="quizz-footer-author-date">${quiz.date_of_creation.date.split(' ')[0]}</div>
                     </div>
                 </div>
@@ -223,7 +223,7 @@
                 <div class="quizz-footer-author">
                     <div class="quizz-footer-author-avatar"><img src="/img/avatars/1.png" alt="avatar"/></div>
                     <div class="quizz-footer-author-details">
-                        <div class="quizz-footer-author-name">Quizzone</div>
+                        <div class="quizz-footer-author-name">${quiz.author_name??'quizzone'}</div>
                         <div class="quizz-footer-author-date">${quiz.created.date.split(' ')[0]}</div>
                     </div>
                 </div>
