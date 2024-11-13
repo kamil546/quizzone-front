@@ -34,6 +34,16 @@ app.get('/quizzes',(req,res)=>{
 app.get('/my-quizzes',(req,res)=>{
     res.render('my-quizzes');
 });
+app.get('/quizzes/:id', (req, res)=>{
+    const id = req.params.id;
+    res.render('quiz-game', { id: id });  
+});
+app.get('/score/:id', (req, res)=>{
+    const id = req.params.id;
+    res.render('score', { id: id });  
+});
+
+
 
 
 app.listen(PORT,()=>{

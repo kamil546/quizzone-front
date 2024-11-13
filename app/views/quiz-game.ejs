@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'/>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="/css/game-layout.css"/>
+    <title>Quizzone - Quiz</title>
+</head>
+<body>
+    <div class="gameovl">
+        <h4 id="quiz-question"></h4>
+        <div id="question-container" class="question-container">
+            <p id="question-content" class="question-content"></p>
+            <button id="answerA" class="answer-btn"></button>
+            <button id="answerB" class="answer-btn"></button>
+            <button id="answerC" class="answer-btn"></button>
+            <button id="answerD" class="answer-btn"></button>
+        </div>
+        
+    </div>
+
+    <script>
+        const id = "<%= id %>";
+        const token = localStorage.getItem('jwt-token');
+        let currentQuestionIndex = 0;
+        let questions = [];
+        let idw;
+
+        // Funkcja do rozpoczęcia quizu
+        const start_quiz = async () => {
+            try {
+                const response = await fetch(`http://quizzone.zapto.org:8000/api/startquiz/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (!response.ok) throw new Error('Błąd zapisania do quizu');
+                const responseData = await response.json(); // Dekodowanie odpowiedzi JSON
+                idw = responseData['id_attempt'];     
+                get_question();  
+            } catch (error) {
+                console.error('Error', error);
+            }
+        };
+        const get_question = async () => {
+            if (!idw) {
+                console.error("idw nie jest ustawione.");
+                return;
+            }
+            try {
+                const response = await fetch(`http://quizzone.zapto.org:8000/api/attemptquiz/${idw}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error('Błąd pobrania pytania');
+                }
+                const data = await response.json();
+                const attemptQuiz=data['attemptQuiz']
+                // Ustawienie nazwy quizu i listy pytań
+                questions = attemptQuiz['questions'];
+
+                // Wyświetl pierwsze pytanie
+                displayQuestion();
+            } catch (error) {
+                console.error('Error', error);
+            }
+        };
+
+        // Funkcja do wyświetlenia aktualnego pytania
+        const displayQuestion = async () => {
+            if (currentQuestionIndex >= questions.length) {
+                window.location.href = `/score/${idw}`;
+                return;
+            }
+
+            const question = questions[currentQuestionIndex];
+            document.getElementById('quiz-question').innerText = 'Pytanie nr '+(currentQuestionIndex+1);
+            document.getElementById('question-content').innerText = question.content;
+            document.getElementById('answerA').innerText = question.answerA;
+            document.getElementById('answerB').innerText = question.answerB;
+            document.getElementById('answerC').innerText = question.answerC;
+            document.getElementById('answerD').innerText = question.answerD;
+
+            // Dodanie obsługi kliknięć do przycisków odpowiedzi
+            document.querySelectorAll('.answer-btn').forEach(button => {
+                button.onclick = () => submitAnswer(question.id, button.innerText);
+            });
+        };
+
+        // Funkcja do przesłania odpowiedzi i przejścia do następnego pytania
+        const submitAnswer = async (questionId, answer) => {
+            try {
+                const response = await fetch(`http://quizzone.zapto.org:8000/api/answerToOne/${questionId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ answer: answer })
+                });
+                if (!response.ok) throw new Error('Błąd wysyłania odpowiedzi');
+                
+                currentQuestionIndex++;  // Przejście do następnego pytania
+                displayQuestion();       // Wyświetlenie następnego pytania
+            } catch (error) {
+                console.error('Error', error);
+            }
+        };
+
+        // Rozpocznij quiz przy załadowaniu strony
+        start_quiz();
+    </script>
+</body>
+</html>
