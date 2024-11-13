@@ -801,3 +801,31 @@ color:inherit!important;
     transform: rotate(0deg);
     font-size:3.3em;
 }
+.menu-add-quiz{
+    display: flex;
+    font-size: 1.3em;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+.quiz-add-form{
+    text-align: center;
+}
+.quiz-add-form input{
+    max-width: 300px;
+    margin-bottom: 25px;
+}
+.quiz-add-form select{
+    width: 300px;
+    margin-bottom: 25px;
+    font-size: 1.2em;
+}
+.quiz-add-form label{
+    min-width: 300px;
+    font-size: 1.5em;
+}
+.quiz-add-form button{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

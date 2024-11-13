@@ -42,6 +42,14 @@ app.get('/score/:id', (req, res)=>{
     const id = req.params.id;
     res.render('score', { id: id });  
 });
+app.get('/add-new-quiz', (req, res)=>{
+    res.render('add-new-quiz');  
+});
+app.get('/edit-quiz/:id', (req, res)=>{
+    const id = req.params.id;
+    res.render('edit-quiz', { id: id });  
+});
+
 
 
 

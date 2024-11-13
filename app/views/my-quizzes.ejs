@@ -14,7 +14,7 @@
     <div class="cat-section">
 <div class="quizz-search-ovl">
     <div class="quizz-search-header">
-        <div class="search-slogan">Zarzadzaj swoimi quizami</div>
+        <div class="search-slogan">Zarządzaj swoimi quizami</div>
         <div class="quizz-search-engine">
 
         </div>
@@ -22,7 +22,10 @@
 
     <div class="quizz-search-res-ovl">
         <div class="search-res-top">
-            <div class="search-res-head-text">Moje quizy</div>
+            <div class="menu-add-quiz">
+                <div class="search-res-head-text">Moje quizy</div>
+                <div id="add-new-btn" style='background-color: #462ee2;' class="quizz-footer-option1"><i class='bx bx-plus' ></i> Dodaj nowy quiz</div>
+            </div>
             <div class="search-res-head-options">
                 <div class="res-head-option"></div>
                 <div class="res-head-option"></div>
@@ -42,18 +45,15 @@
 </div>
 
     <script>
-
-
-
-
-
         if((localStorage.getItem('jwt-token')==null)||localStorage.getItem('jwt-token')==''){
             window.location.href='/login';
         }
         
         document.addEventListener('DOMContentLoaded', async function() {
             const token = localStorage.getItem('jwt-token');
-
+            document.getElementById('add-new-btn').addEventListener('click',()=>{
+                window.location.href='/add-new-quiz';
+            })
 
         var quizz_notify = (type,mess) =>{
             if(mess&&type){
@@ -126,8 +126,8 @@
                     </div>
                 </div>
                 <div class="quizz-footer-options">
-                    <div class="quizz-footer-option1"><i class='bx bxs-edit-alt' ></i> Edytuj</div>
-                    <div style='background-color: #39364e;' class="quizz-footer-option1"><i class='bx bxs-x-circle' ></i> Usun</div>
+                    <div class="quizz-footer-option1 edit-btn"><i class='bx bxs-edit-alt' ></i> Edytuj</div>
+                    <div style='background-color: #39364e;' class="quizz-footer-option1 delete-btn"><i class='bx bxs-x-circle' ></i> Usun</div>
                 </div>
                 </div>
             </div>
@@ -140,6 +140,7 @@
                 var quizz_list = document.querySelectorAll('div.quizz-res-tile');
                 quizz_list.forEach((quizz)=>{
                     var idq = quizz.getAttribute('data-option');
+                    quizz.querySelectorAll('.quizz-footer-option1')[0].addEventListener('click',()=>{quizz_edit(idq)});
                     quizz.querySelectorAll('.quizz-footer-option1')[1].addEventListener('click',()=>{quizz_del(idq)});
                 });
 
@@ -153,67 +154,50 @@
 
         }
 
-
         var quizz_del = async (quizz_id) => {
             const jwt_token = window.localStorage.getItem('jwt-token');
             console.log(jwt_token);
-        if(jwt_token){
-        try{
-        const response = await fetch(`http://quizzone.zapto.org:8000/api/quiz/${quizz_id}`,{
-            method: 'DELETE',
-            headers: {
-                'Content-Type':'application/json',
-                'Authorization': `Bearer ${jwt_token}`
+            if(jwt_token){
+                try{
+                    const response = await fetch(`http://quizzone.zapto.org:8000/api/quiz/${quizz_id}`,{
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type':'application/json',
+                            'Authorization': `Bearer ${jwt_token}`
+                        }
+                    });
+                    const data = response.json();
+                    if(response.ok){
+                        console.log(`Quiz o id ${quizz_id} usunieto pomyslnie..`);
+                        await reload_quizzlist();
+                        quizz_notify(1,'Quizz usunieto pomyslnie..');
+                        return true;
+                    }
+                    else console.log('Przy usuwaniu quizu wystapil blad..');
+
+                    return false;
+                }
+                catch(err){
+                    console.error(`Wystapil blad: ${err}`);
+                }
+            }
+            else return false;
+            }
+            reload_quizzlist();   
+        });
+        var quizz_edit = async (quizz_id) => {
+           window.location.href=`/edit-quiz/${quizz_id}`;
+        }
+        
+        
+        document.addEventListener('click',(event)=> {
+            if(event.target.classList.contains('sidebar-user-logout')||event.target.classList.contains('bx-log-out')){
+                    localStorage.setItem('jwt-token','');
+                    console.log('Wylogowano..');
+                    window.location.href='/login';
             }
         });
-        const data = response.json();
-        if(response.ok){
-            console.log(`Quiz o id ${quizz_id} usunieto pomyslnie..`);
-            await reload_quizzlist();
-            quizz_notify(1,'Quizz usunieto pomyslnie..');
-            return true;
-        }
-        else console.log('Przy usuwaniu quizu wystapil blad..');
-
-        return false;
-        }
-        catch(err){
-            console.error(`Wystapil blad: ${err}`);
-        }
-
-
-
-
-
-        }
-        else
-        return false;
-        }
-
-
-
-
-
-
-        reload_quizzlist();
-
-
-
-
-
-
-            
-        });
-
-document.addEventListener('click',(event)=> {
-    if(event.target.classList.contains('sidebar-user-logout')||event.target.classList.contains('bx-log-out')){
-            localStorage.setItem('jwt-token','');
-            console.log('Wylogowano..');
-            window.location.href='/login';
-    }
-});        
-
-
+           
     </script>
 <div id="notify-cnt">
 </div>   
