@@ -5,18 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'/>
     <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="/css/game-layout.css"/>
     <title>Quizzone - Quiz</title>
 </head>
 <body>
-    <div class="ovl-app">
-        <h1 id="quiz-name"></h1>
-        <div id="question-container">
-            <p id="question-content"></p>
+    <div class="gameovl">
+        <h4 id="quiz-question"></h4>
+        <div id="question-container" class="question-container">
+            <p id="question-content" class="question-content"></p>
             <button id="answerA" class="answer-btn"></button>
             <button id="answerB" class="answer-btn"></button>
             <button id="answerC" class="answer-btn"></button>
             <button id="answerD" class="answer-btn"></button>
         </div>
+        
     </div>
 
     <script>
@@ -63,7 +65,6 @@
                 const data = await response.json();
                 const attemptQuiz=data['attemptQuiz']
                 // Ustawienie nazwy quizu i listy pytań
-                document.getElementById('quiz-name').innerText = attemptQuiz['name'];
                 questions = attemptQuiz['questions'];
 
                 // Wyświetl pierwsze pytanie
@@ -81,6 +82,7 @@
             }
 
             const question = questions[currentQuestionIndex];
+            document.getElementById('quiz-question').innerText = 'Pytanie nr '+(currentQuestionIndex+1);
             document.getElementById('question-content').innerText = question.content;
             document.getElementById('answerA').innerText = question.answerA;
             document.getElementById('answerB').innerText = question.answerB;

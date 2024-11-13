@@ -5,11 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'/>
     <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="/css/game-layout.css"/>
     <title>Quizzone - Quiz</title>
 </head>
 <body>
-    <div class="ovl-app">
-        <div id="score"></div>
+    <div class="gameovl">
+        <div class="scoreovl">
+            <div class="wyniki">
+                <h3>Gratulacje ukończyłeś quiz!!!</h3>
+                <div id="results"class="results">
+                    <p>Poprawne odpowiedzi: <span id="correct-answers">0</span></p>
+                    <p>Niepoprawne odpowiedzi: <span id="incorrect-answers">0</span></p>
+                </div>
+            </div>
+            <div id="score" class="score">Twój wynik = </div>
+            <div class="score-buttons">
+                <button id="again-btn" class="again-btn" >Spróbuj jeszcze raz</button>
+                <button id="close-btn" class="close-btn">Powrót</button>
+            </div>
+        </div>
     </div>
     
     <script>
@@ -31,7 +45,19 @@
                 const score=data['score'];
                 const wynik=score['correct'];
                 const wszystkie=score['all'];
-                document.getElementById("score").innerHTML=wynik+'/'+wszystkie;
+                const quizid=score['quizId'];
+                const bledne=score['incorrect'];
+
+                // Ustawianie wyników w HTML
+                document.getElementById("score").innerHTML = 'Twój wynik = ' + (100 * wynik / wszystkie).toFixed(2) + '%';
+                document.getElementById("correct-answers").textContent = wynik;
+                document.getElementById("incorrect-answers").textContent =bledne;
+                document.getElementById("again-btn").addEventListener('click',()=>{
+                    window.location.href = `/quizzes/${quizid}`;
+                });
+                document.getElementById("close-btn").addEventListener('click',()=>{
+                    window.location.href = `/dashboard`;
+                });
             } catch (error) {
                 console.error('Error', error);
             }
