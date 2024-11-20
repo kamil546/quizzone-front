@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'/>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="/css/game-layout.css"/>
+    <title>Quizzone - Szczegóły Quizu</title>
+</head>
+<body>
+    <div class="ovl-app">
+        <%- include('components/left-sidebar',{sitename: 'quizzes',username: ''}); -%>
+        <div class="cat-cnt">
+            
+            <div class="quizz-search-header">
+                <div class="quiz-name" id="quiz-name"></div>
+                <div class="quiz-category" id="quiz-category"></div>
+            </div>
+            <div class="rates">
+                <div>
+                    <h2>3.5</h2>
+                </div>
+                <div class="stars">
+                    <i class='bx bxs-star'></i>
+                    <i class='bx bxs-star'></i>
+                    <i class='bx bxs-star'></i>
+                    <i class='bx bxs-star'></i>
+                    <i class='bx bxs-star'></i>
+                </div>
+            </div>
+            <div class="comment-form-container">
+                <form id="comment-form" class="comment-form">
+                    <textarea id="comment-content" class="comment-content"placeholder='Napisz komentarz' name="content" rows="4" required></textarea>
+                    <br>
+                    <button type="submit" id="add-comment-btn" style='background-color: #462ee2;' class="quizz-footer-option1">
+                        <i class='bx bx-comment'></i>
+                        Dodaj komentarz
+                    </button>
+                </form>
+                <div id="comment-response-message"></div>
+            </div>
+            <div class="comments-list-container">
+                <h2>Komentarze:</h2>
+                <div id="comments-list"></div>
+            </div>
+        </div>
+
+        <script>
+            const quizId = "<%= id %>"; // ID quizu pobrane z serwera lub szablonu
+
+            // Funkcja do pobrania informacji o quizie
+            async function loadQuizInfo() {
+                try {
+                    const response = await fetch(`http://quizzone.zapto.org:8000/api/quizinfo/${quizId}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('jwt-token')}`
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Błąd podczas pobierania informacji o quizie');
+                    }
+
+                    const quizData = await response.json();
+                    const quizInfo=quizData["quiz"];
+                    document.getElementById('quiz-name').textContent = quizInfo["name"];
+                    document.getElementById('quiz-category').textContent = quizInfo["category"];
+                    document.getElementById('quiz-question-count').textContent = quizInfo["questionCount"];
+                } catch (error) {
+                    console.error('Error:', error);
+                    document.getElementById('quiz-info-container').innerHTML = 
+                        'Wystąpił błąd podczas pobierania informacji o quizie.';
+                }
+            }
+
+            // Funkcja do wczytania istniejących komentarzy
+            async function loadComments() {
+                try {
+                    const response = await fetch(`http://quizzone.zapto.org:8000/api/quiz/${quizId}/getcomments`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('jwt-token')}`
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Błąd podczas pobierania komentarzy');
+                    }
+
+                    const comments = await response.json();
+                    const commentsList = document.getElementById('comments-list');
+                    commentsList.innerHTML = ''; // Czyści istniejącą listę
+
+                    comments.forEach(comment => {
+                        const commentDiv = document.createElement('div');
+                        commentDiv.className = 'comment-item';
+                        commentDiv.innerHTML = `
+                            <div class="quizz-footer-author">
+                                <div class="quizz-footer-author-avatar"><img src="/img/avatars/1.png" alt="avatar"/></div>
+                                <div class="quizz-footer-author-details">
+                                    <div class="quizz-footer-author-name">${comment.authorName??'quizzone'}</div>
+                                    <div class="quizz-footer-author-date">${new Date(comment.dateOfCreation).toLocaleString()}</div>
+                                </div>
+                            </div>
+                            <p>${comment.content}</p>
+                            <hr/>
+                        `;
+                        commentsList.appendChild(commentDiv);
+                    });
+                } catch (error) {
+                    console.error('Error:', error);
+                    document.getElementById('comments-list').innerHTML = 
+                        'Wystąpił błąd podczas pobierania komentarzy.';
+                }
+            }
+
+            // Obsługa wysyłania formularza dodawania komentarza
+            document.getElementById('comment-form').addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const content = document.getElementById('comment-content').value;
+                const token = localStorage.getItem('jwt-token');
+
+                try {
+                    const response = await fetch(`http://quizzone.zapto.org:8000/api/quiz/${quizId}/comment`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ content: content })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Błąd dodawania komentarza');
+                    }
+
+                    document.getElementById('comment-response-message').innerHTML = 
+                        'Komentarz został dodany pomyślnie.';
+                    document.getElementById('comment-form').reset();
+
+                    loadComments(); // Odśwież listę komentarzy
+                } catch (error) {
+                    console.error('Error:', error);
+                    document.getElementById('comment-response-message').innerHTML = 
+                        'Wystąpił błąd podczas dodawania komentarza. Spróbuj ponownie.';
+                }
+            });
+
+            // Wczytanie informacji o quizie i komentarzy po załadowaniu strony
+            window.onload = () => {
+                loadQuizInfo();
+                loadComments();
+            };
+        </script>
+    </div>
+</body>
+</html>
