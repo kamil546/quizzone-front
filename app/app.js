@@ -49,6 +49,11 @@ app.get('/edit-quiz/:id', (req, res)=>{
     const id = req.params.id;
     res.render('edit-quiz', { id: id });  
 });
+app.get('/show-quiz/:id', (req, res)=>{
+    const id = req.params.id;
+    res.render('show-quiz', { id: id });  
+});
+
 
 
 
