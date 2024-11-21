@@ -158,6 +158,10 @@
             const jwt_token = window.localStorage.getItem('jwt-token');
             console.log(jwt_token);
             if(jwt_token){
+
+                const confirmed = confirm(`Czy na pewno chcesz usunąć quiz?`);
+                if (!confirmed) return false;
+
                 try{
                     const response = await fetch(`http://quizzone.zapto.org:8000/api/quiz/${quizz_id}`,{
                         method: 'DELETE',
