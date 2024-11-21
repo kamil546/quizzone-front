@@ -40,9 +40,9 @@
         user_progressbar = $('.progressbar-bar-fill');
 
 
-            if(data.user.profilePicture)count_won.html(data.user.profilePicture);
-            if(data.user.profilePicture)count_highest_score.html(data.user.profilePicture);
-            if(data.user.profilePicture)count_correct_answers.html(data.user.profilePicture);
+            if(data.user.points)count_won.html(data.user.points);
+            if(data.user.points)count_highest_score.html(data.user.points);
+            if(data.user.points)count_correct_answers.html(data.user.points);
             if(data.user.profilePicture)user_progressbar.css({"width":`${data.user.profilePicture*40}%`});
 
 
