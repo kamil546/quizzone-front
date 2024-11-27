@@ -86,8 +86,16 @@
             document.getElementById('question-content').innerText = question.content;
             document.getElementById('answerA').innerText = question.answerA;
             document.getElementById('answerB').innerText = question.answerB;
-            document.getElementById('answerC').innerText = question.answerC;
-            document.getElementById('answerD').innerText = question.answerD;
+            if(question.isTrueOrFalse){
+                document.getElementById('answerC').style.display = 'none';
+                document.getElementById('answerD').style.display = 'none';
+            }
+            else{
+                document.getElementById('answerC').style.display = 'block';
+                document.getElementById('answerD').style.display = 'block';
+                document.getElementById('answerC').innerText = question.answerC;
+                document.getElementById('answerD').innerText = question.answerD;
+            }
 
             // Dodanie obsługi kliknięć do przycisków odpowiedzi
             document.querySelectorAll('.answer-btn').forEach(button => {
