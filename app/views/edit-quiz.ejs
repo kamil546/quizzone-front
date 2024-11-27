@@ -32,40 +32,68 @@
                 </form>
                 <div id="response-message"></div>
 
+                <div class="quiz-questions-list">
+                    <h3>Pytania w quizie</h3>
+                    <ul id="questions-list">
+                    </ul>
+                </div>
+
                 <!-- Formularz dodawania pytania do quizu -->
                 <div class="quiz-question-form">
                     <h3>Dodaj nowe pytanie</h3>
                     <form id="question-form">
                         <label for="question-content">Treść pytania:</label><br>
                         <input type="text" id="question-content" name="content" required><br>
-                        
-                        <label for="answer-a">Odpowiedź A:</label><br>
-                        <input type="text" id="answer-a" name="answerA" required><br>
-                        
-                        <label for="answer-b">Odpowiedź B:</label><br>
-                        <input type="text" id="answer-b" name="answerB" required><br>
-                        
-                        <label for="answer-c">Odpowiedź C:</label><br>
-                        <input type="text" id="answer-c" name="answerC" required><br>
-                        
-                        <label for="answer-d">Odpowiedź D:</label><br>
-                        <input type="text" id="answer-d" name="answerD" required><br>
-                        
-                        <label for="correct-answer">Prawidłowa odpowiedź:</label><br>
-                        <select id="correct-answer" name="correctAnswer" required>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="C">C</option>
-                            <option value="D">D</option>
+                
+                        <label for="question-type">Typ pytania:</label><br>
+                        <select id="question-type" name="type" required>
+                            <option value="multiple-choice">Wielokrotnego wyboru</option>
+                            <option value="true-false">Prawda/Fałsz</option>
                         </select><br>
-
-                        <button type="submit" id="add-question-btn" style='background-color: #28a745;' class="quizz-footer-option1">
-                            <i class='bx bx-plus'></i>
+                
+                        <!-- Sekcja dla pytań wielokrotnego wyboru -->
+                        <div id="multiple-choice-options">
+                            <label for="answer-a">Odpowiedź A:</label><br>
+                            <input type="text" id="answer-a" name="answerA"><br>
+                            
+                            <label for="answer-b">Odpowiedź B:</label><br>
+                            <input type="text" id="answer-b" name="answerB"><br>
+                            
+                            <label for="answer-c">Odpowiedź C:</label><br>
+                            <input type="text" id="answer-c" name="answerC"><br>
+                            
+                            <label for="answer-d">Odpowiedź D:</label><br>
+                            <input type="text" id="answer-d" name="answerD"><br>
+                            
+                            <label for="correct-answer">Prawidłowa odpowiedź:</label><br>
+                            <select id="correct-answer" name="correctAnswer">
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select><br>
+                        </div>
+                
+                        <!-- Sekcja dla pytań Prawda/Fałsz -->
+                        <div id="true-false-options" style="display: none;">
+                            <label for="true-false-correct">Prawidłowa odpowiedź:</label><br>
+                            <select id="true-false-correct" name="trueFalseAnswer">
+                                <option value="true">Prawda</option>
+                                <option value="false">Fałsz</option>
+                            </select><br>
+                        </div>
+                
+                        <!-- Opcjonalny czas na odpowiedź -->
+                        <label for="question-timer">Czas na odpowiedź (sekundy, opcjonalnie):</label><br>
+                        <input type="number" id="question-timer" name="timer" min="0" placeholder="Wpisz czas w sekundach"><br>
+                
+                        <button type="submit" id="add-question-btn" style="background-color: #28a745;" class="quizz-footer-option1">
+                            <i class="bx bx-plus"></i>
                             Dodaj pytanie
                         </button>
                     </form>
                     <div id="question-response-message"></div>
-                </div>     
+                </div>
             </div>
         </div>
         
@@ -131,6 +159,36 @@
                     const quizData=data["quiz"];
                     document.getElementById('quiz-name').value = quizData["name"];
                     document.getElementById('category-select').value = quizData["categoryId"];
+
+                    const questionsList = document.getElementById('questions-list');
+                    questionsList.innerHTML = ''; // Wyczyszczenie istniejących pytań
+
+                    quizData["questions"].forEach(question => {
+                        const listItem = document.createElement('li');
+                        if(question.isTrueOrFalse == true){
+                            listItem.innerHTML = `
+                                <div>
+                                    <strong>${question.content}</strong>
+                                    <p><em>Prawidłowa odpowiedź: ${question.correctAnswer}</em></p>
+                                </div>
+                            `;
+                        }
+                        else{
+                            listItem.innerHTML = `
+                                <div>
+                                    <strong>${question.content}</strong>
+                                    <ul>
+                                        <li>A: ${question.answerA}</li>
+                                        <li>B: ${question.answerB}</li>
+                                        <li>C: ${question.answerC}</li>
+                                        <li>D: ${question.answerD}</li>
+                                    </ul>
+                                    <p><em>Prawidłowa odpowiedź: ${question.correctAnswer}</em></p>
+                                </div>
+                            `;
+                        }
+                        questionsList.appendChild(listItem);
+                    });
                     
                 } catch (error) {
                     console.error('Error:', error);
@@ -172,36 +230,32 @@
                         'Wystąpił błąd podczas edycji quizu. Spróbuj ponownie.';
                 }
             });
-             // Obsługa wysyłania formularza dodawania pytania
-             document.getElementById('question-form').addEventListener('submit', async (event) => {
+            
+            // Obsługa wysyłania formularza dodawania pytania
+            document.getElementById('question-form').addEventListener('submit', async (event) => {
                 event.preventDefault();
 
                 const content = document.getElementById('question-content').value;
-                const answerA = document.getElementById('answer-a').value;
-                const answerB = document.getElementById('answer-b').value;
-                const answerC = document.getElementById('answer-c').value;
-                const answerD = document.getElementById('answer-d').value;
-                const selectedCorrectAnswer = document.getElementById('correct-answer').value;
-
-                // Przypisuje pełną treść odpowiedzi na podstawie wybranej opcji
-                let correctAnswer;
-                switch (selectedCorrectAnswer) {
-                    case "A":
-                        correctAnswer = answerA;
-                        break;
-                    case "B":
-                        correctAnswer = answerB;
-                        break;
-                    case "C":
-                        correctAnswer = answerC;
-                        break;
-                    case "D":
-                        correctAnswer = answerD;
-                        break;
-                    default:
-                        correctAnswer = ""; // W razie gdyby nic nie było wybrane
-                }
+                const type = document.getElementById('question-type').value;
+                const timer = document.getElementById('question-timer').value || null;
                 const token = localStorage.getItem('jwt-token');
+
+                let payload = { content, type, timer };
+
+                if (type === 'multiple-choice') {
+                    // Dane dla pytania wielokrotnego wyboru
+                    payload.answerA = document.getElementById('answer-a').value;
+                    payload.answerB = document.getElementById('answer-b').value;
+                    payload.answerC = document.getElementById('answer-c').value;
+                    payload.answerD = document.getElementById('answer-d').value;
+                    payload.correctAnswer = document.getElementById('correct-answer').value;
+                } else if (type === 'true-false') {
+                    // Dane dla pytania Prawda/Fałsz
+                    payload.answerA = "Prawda";
+                    payload.answerB = "Fałsz";
+                    const selectedTrueFalse = document.getElementById('true-false-correct').value;
+                    payload.correctAnswer = selectedTrueFalse === "true" ? payload.answerA : payload.answerB;
+                }
 
                 try {
                     const response = await fetch(`http://quizzone.zapto.org:8000/api/quiz/${quizId}/add-question`, {
@@ -210,14 +264,7 @@
                             'Content-Type': 'application/json',
                             'Authorization': `Bearer ${token}`
                         },
-                        body: JSON.stringify({ 
-                            content: content, 
-                            answerA: answerA, 
-                            answerB: answerB, 
-                            answerC: answerC, 
-                            answerD: answerD, 
-                            correctAnswer: correctAnswer
-                        })
+                        body: JSON.stringify(payload)
                     });
 
                     if (!response.ok) {
@@ -226,10 +273,27 @@
 
                     document.getElementById('question-response-message').innerHTML = 'Pytanie zostało dodane pomyślnie.';
                     document.getElementById('question-form').reset(); // Resetuje formularz
+                    document.getElementById('multiple-choice-options').style.display = 'block';
+                    document.getElementById('true-false-options').style.display = 'none';
                 } catch (error) {
                     console.error('Error:', error);
-                    document.getElementById('question-response-message').innerHTML = 
+                    document.getElementById('question-response-message').innerHTML =
                         'Wystąpił błąd podczas dodawania pytania. Spróbuj ponownie.';
+                }
+            });
+
+            //dynamiczne ustawianie typu pytania
+            document.getElementById('question-type').addEventListener('change', function () {
+                const type = this.value;
+                const multipleChoiceOptions = document.getElementById('multiple-choice-options');
+                const trueFalseOptions = document.getElementById('true-false-options');
+
+                if (type === 'multiple-choice') {
+                    multipleChoiceOptions.style.display = 'block';
+                    trueFalseOptions.style.display = 'none';
+                } else if (type === 'true-false') {
+                    multipleChoiceOptions.style.display = 'none';
+                    trueFalseOptions.style.display = 'block';
                 }
             });
         </script>
