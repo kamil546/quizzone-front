@@ -10,13 +10,18 @@
 </head>
 <body>
     <div class="gameovl">
-        <h4 id="quiz-question"></h4>
         <div id="question-container" class="question-container">
-            <p id="question-content" class="question-content"></p>
-            <button id="answerA" class="answer-btn"></button>
-            <button id="answerB" class="answer-btn"></button>
-            <button id="answerC" class="answer-btn"></button>
-            <button id="answerD" class="answer-btn"></button>
+            <div class="question-head">
+                <div id="quiz-question"></div>
+                <div id="question-content"></div>
+            </div>
+            <div class="answer-ovl">
+                <div id="answerA" class="answer-btn"></div>
+                <div id="answerB" class="answer-btn"></div>
+                <div id="answerC" class="answer-btn"></div>
+                <div id="answerD" class="answer-btn"></div>
+            </div>
+
         </div>
         
     </div>
@@ -63,6 +68,7 @@
                     throw new Error('Błąd pobrania pytania');
                 }
                 const data = await response.json();
+                console.log(data);
                 const attemptQuiz=data['attemptQuiz']
                 // Ustawienie nazwy quizu i listy pytań
                 questions = attemptQuiz['questions'];
@@ -116,8 +122,8 @@
                 });
                 if (!response.ok) throw new Error('Błąd wysyłania odpowiedzi');
                 
-                currentQuestionIndex++;  // Przejście do następnego pytania
-                displayQuestion();       // Wyświetlenie następnego pytania
+                currentQuestionIndex++;
+                displayQuestion();
             } catch (error) {
                 console.error('Error', error);
             }
