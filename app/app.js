@@ -55,10 +55,6 @@ app.get('/show-quiz/:id', (req, res)=>{
 });
 
 
-
-
-
-
 app.listen(PORT,()=>{
-    console.log('dzialo..');
+    console.log('Serwer uruchomiony na porcie: '+ PORT);
 });

@@ -34,21 +34,31 @@
         }
 
         function load_stats(data){    
-        const count_won = $('.stats-details-value:eq(0)'),
-        count_highest_score = $('.stats-details-value:eq(1)'),
-        count_correct_answers = $('.stats-details-value:eq(2)'),
-        user_progressbar = $('.progressbar-bar-fill');
+            const level = $('.stats-details-value:eq(0)'),
+            count_solved = $('.stats-details-value:eq(1)'),
+            count_points = $('.stats-details-value:eq(2)'),
+            user_progressbar = $('.progressbar-bar-fill'),
+            user_progress_text = $('.progressbar-text'),
+            user_tier = $('.mainuser-name-tier');
 
-
-            if(data.user.points)count_won.html(data.user.points);
-            if(data.user.points)count_highest_score.html(data.user.points);
-            if(data.user.points)count_correct_answers.html(data.user.points);
-            if(data.user.profilePicture)user_progressbar.css({"width":`${data.user.profilePicture*40}%`});
+            if(data.user.level)level.html(data.user.level);
+            if(data.user.solved)count_solved.html(data.user.solved);
+            if(data.user.points)count_points.html(data.user.points);
+            if(data.user.title && data.user.level)user_tier.html(data.user.title + ", " + data.user.level + "lvl");
+            if (data.user.have && data.user.nextLevel) {
+                const progressPercent = Math.round((data.user.have / data.user.nextLevel) * 100);
+                user_progressbar.css({ "width": `${progressPercent}%` });
+                user_progress_text.html(`${data.user.have} / ${data.user.nextLevel} XP`);
+            }
+            else{
+                user_progressbar.css({ "width": '0%' });
+            }
+            if(data.user.have && data.user.nextLevel)user_progress_text.html(data.user.have + " / " + data.user.nextLevel + " XP");
 
 
             if(load_username(data.user.username)) console.log('set(username) sucess..');
 
-        return true;
+            return true;
         }   
 
 
@@ -86,7 +96,7 @@
                     <div class="mainuser-name-tier">Poczatkujacy, 1 lvl</div>
                 </div>
                 <div class="mainuser-details-progressbar">
-                    <div class="progressbar-text">2100/3000XP</div>
+                    <div class="progressbar-text">0/10XP</div>
                     <div class="progressbar-bar">
                         <div class="progressbar-bar-fill"></div>
                     </div>
@@ -95,22 +105,22 @@
                     <div class="stats-tile">
                         <div class="stats-ico"><i class='bx bxs-flag-alt'></i></div>
                         <div class="stats-details">
-                            <div class="stats-details-value">27</div>
-                            <div class="stats-details-title">Wygranych</div>
+                            <div class="stats-details-value">0</div>
+                            <div class="stats-details-title">Poziom</div>
                         </div>
                     </div>
                     <div class="stats-tile">
                         <div class="stats-ico"><i class='bx bxs-trophy'></i></div>
                         <div class="stats-details">
-                            <div class="stats-details-value">910</div>
-                            <div class="stats-details-title">Najwyzszy wynik</div>
+                            <div class="stats-details-value">0</div>
+                            <div class="stats-details-title">Rozwiązane quizy</div>
                         </div>
                     </div>
                     <div class="stats-tile">
                         <div class="stats-ico"><i class='bx bxs-check-circle' ></i></div>
                         <div class="stats-details">
-                            <div class="stats-details-value">115</div>
-                            <div class="stats-details-title">Poprawnych odpowiedzi</div>
+                            <div class="stats-details-value">0</div>
+                            <div class="stats-details-title">Punkty'</div>
                         </div>
                     </div>
                 </div>
