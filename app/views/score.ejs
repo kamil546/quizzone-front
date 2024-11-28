@@ -15,6 +15,7 @@
                 <h3>Gratulacje ukończyłeś quiz!!!</h3>
                 <div id="results"class="results">
                     <p>Poprawne odpowiedzi: <span id="correct-answers">0</span></p>
+                    <p>Nieudzielone odpowiedzi: <span id="not-answered-answers">0</span></p>
                     <p>Niepoprawne odpowiedzi: <span id="incorrect-answers">0</span></p>
                 </div>
             </div>
@@ -47,11 +48,13 @@
                 const wszystkie=score['all'];
                 const quizid=score['quizId'];
                 const bledne=score['incorrect'];
+                const nieodpowiedziane=score['notAnswered'];
 
                 // Ustawianie wyników w HTML
                 document.getElementById("score").innerHTML = 'Twój wynik = ' + (100 * wynik / wszystkie).toFixed(2) + '%';
                 document.getElementById("correct-answers").textContent = wynik;
                 document.getElementById("incorrect-answers").textContent =bledne;
+                document.getElementById("not-answered-answers").textContent = nieodpowiedziane;
                 document.getElementById("again-btn").addEventListener('click',()=>{
                     window.location.href = `/quizzes/${quizid}`;
                 });
