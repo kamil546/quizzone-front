@@ -1,3 +1,5 @@
+
+
 :root{
     --gray1: #4e4e4e;
     --gray2: #70787f;
@@ -56,7 +58,7 @@ body{
     align-items: center;
     margin: 0;
     padding: 0;
-    font-family: roboto;
+    font-family: "Roboto", serif;
     flex-direction: column;
     overflow: auto !important;
     background-color: var(--white1);
