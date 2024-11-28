@@ -34,6 +34,7 @@
         const id = "<%= id %>";
         const token = localStorage.getItem('jwt-token');
         let currentQuestionIndex = 0;
+        var question_interval,counter=0;
         let questions = [];
         let idw;
 
@@ -93,12 +94,14 @@
 
             const question = questions[currentQuestionIndex];
             var timelimit = question.timeLimit;
+            
             if(timelimit){
                 document.querySelector('.game-top').style.display='flex';
-                var counter = timelimit;
-                var question_interval = setInterval(function(){
+                counter = timelimit;
+                question_interval = setInterval(function(){
                     if(counter==0) {
                         clearInterval(question_interval);
+                        document.querySelector('.game-top').style.display='none';
                         currentQuestionIndex++;
                         displayQuestion();
                     }
@@ -106,6 +109,8 @@
                     counter--;
                 },1000);
             }
+
+
 
             document.getElementById('quiz-question').innerText = 'Pytanie nr '+(currentQuestionIndex+1);
             document.getElementById('question-content').innerText = question.content;
@@ -123,7 +128,16 @@
             }
 
             document.querySelectorAll('.answer-btn').forEach(button => {
-                button.onclick = () => submitAnswer(question.id, button.innerText);
+                button.onclick = () => {
+                    if(question_interval) {
+                        clearInterval(question_interval);
+                        document.querySelector('.game-top').style.display='none';
+                        counter = 0;
+                        question_interval = null;
+                        console.log('Nima');
+                    }
+                    submitAnswer(question.id, button.innerText);
+                }
             });
         };
 
