@@ -13,6 +13,7 @@
     overflow: auto;
     padding: 24px;
     box-sizing: border-box;
+    position: relative;
 }
 .question-head{
     display: flex;
@@ -86,3 +87,28 @@ background-color: #d97861;
     margin-top: 10px;
 }
 
+
+
+.game-top{
+    display: none;
+    justify-content: flex-end;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;  
+}
+.question-counter{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.6em;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 6px solid #ef846a;
+    background-color: #ffffffbf;
+    font-weight: bold;
+    margin: 40px;
+}
