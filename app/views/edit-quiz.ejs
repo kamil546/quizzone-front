@@ -248,7 +248,9 @@
                     payload.answerB = document.getElementById('answer-b').value;
                     payload.answerC = document.getElementById('answer-c').value;
                     payload.answerD = document.getElementById('answer-d').value;
-                    payload.correctAnswer = document.getElementById('correct-answer').value;
+                    const correctAnswerKey = document.getElementById('correct-answer').value;
+                    const correctAnswerId = `answer-${correctAnswerKey.toLowerCase()}`;
+                    payload.correctAnswer = document.getElementById(correctAnswerId).value;
                 } else if (type === 'true-false') {
                     // Dane dla pytania Prawda/Fałsz
                     payload.answerA = "Prawda";
