@@ -49,6 +49,7 @@
                         <select id="question-type" name="type" required>
                             <option value="multiple-choice">Wielokrotnego wyboru</option>
                             <option value="true-false">Prawda/Fałsz</option>
+                            <option value="open">Otwarte</option>
                         </select><br>
                 
                         <!-- Sekcja dla pytań wielokrotnego wyboru -->
@@ -81,6 +82,12 @@
                                 <option value="true">Prawda</option>
                                 <option value="false">Fałsz</option>
                             </select><br>
+                        </div>
+
+                        <!-- Sekcja dla pytań otwartych -->
+                        <div id="open-options" style="display: none;">
+                            <label for="correct-open-answer">Prawidłowa odpowiedź:</label><br>
+                            <input type="text" id="correct-open-answer" name="correct-open-answer"><br>
                         </div>
                 
                         <!-- Opcjonalny czas na odpowiedź -->
@@ -172,6 +179,13 @@
                                     <p><em>Prawidłowa odpowiedź: ${question.correctAnswer}</em></p>
                                 </div>
                             `;
+                        }else if(question.isOpen == true){
+                            listItem.innerHTML = `
+                                <div>
+                                    <strong>${question.content}</strong>
+                                    <p><em>Prawidłowa odpowiedź: ${question.correctAnswer}</em></p>
+                                </div>
+                            `;
                         }
                         else{
                             listItem.innerHTML = `
@@ -257,6 +271,9 @@
                     payload.answerB = "Fałsz";
                     const selectedTrueFalse = document.getElementById('true-false-correct').value;
                     payload.correctAnswer = selectedTrueFalse === "true" ? payload.answerA : payload.answerB;
+                } else if (type === 'open') {
+                    // Dane dla pytania otwartego
+                    payload.correctAnswer = document.getElementById('correct-open-answer').value;
                 }
 
                 try {
@@ -289,13 +306,20 @@
                 const type = this.value;
                 const multipleChoiceOptions = document.getElementById('multiple-choice-options');
                 const trueFalseOptions = document.getElementById('true-false-options');
+                const openOptions = document.getElementById('open-options');
 
                 if (type === 'multiple-choice') {
                     multipleChoiceOptions.style.display = 'block';
                     trueFalseOptions.style.display = 'none';
+                    openOptions.style.display = 'none';
                 } else if (type === 'true-false') {
                     multipleChoiceOptions.style.display = 'none';
                     trueFalseOptions.style.display = 'block';
+                    openOptions.style.display = 'none';
+                } else if (type === 'open') {
+                    multipleChoiceOptions.style.display = 'none';
+                    trueFalseOptions.style.display = 'none';
+                    openOptions.style.display = 'block';
                 }
             });
         </script>
