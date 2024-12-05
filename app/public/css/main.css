@@ -912,4 +912,9 @@ color:inherit!important;
 .stars{
     direction: rtl;
 }
+.game-input{
+    font-size: 2.8em !important;
+    margin-bottom: 30px;
+    text-align: center;
+}
 
