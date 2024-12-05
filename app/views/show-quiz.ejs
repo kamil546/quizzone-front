@@ -19,14 +19,15 @@
             </div>
             <div class="rates">
                 <div>
-                    <h2>3.5</h2>
+                    <h2 id="rate"></h2>
+                    <p id="quiz-opinion-count"></p>
                 </div>
-                <div class="stars">
-                    <i class='bx bxs-star'></i>
-                    <i class='bx bxs-star'></i>
-                    <i class='bx bxs-star'></i>
-                    <i class='bx bxs-star'></i>
-                    <i class='bx bxs-star'></i>
+                <div class="stars" id="rating-stars">
+                    <i class='bx bxs-star' data-value="5"></i>
+                    <i class='bx bxs-star' data-value="4"></i>
+                    <i class='bx bxs-star' data-value="3"></i>
+                    <i class='bx bxs-star' data-value="2"></i>
+                    <i class='bx bxs-star' data-value="1"></i>
                 </div>
             </div>
             <div class="comment-form-container">
@@ -68,13 +69,54 @@
                     const quizInfo=quizData["quiz"];
                     document.getElementById('quiz-name').textContent = quizInfo["name"];
                     document.getElementById('quiz-category').textContent = quizInfo["category"];
-                    document.getElementById('quiz-question-count').textContent = quizInfo["questionCount"];
+                    document.getElementById('quiz-opinion-count').textContent = 'Liczba opini: '+quizInfo["countOpinion"];
+                    document.getElementById('rate').innerHTML = parseFloat(quizInfo["averageOpinion"]).toFixed(2);
                 } catch (error) {
                     console.error('Error:', error);
                     document.getElementById('quiz-info-container').innerHTML = 
                         'Wystąpił błąd podczas pobierania informacji o quizie.';
                 }
             }
+            //Wysyłanie opinii
+            let userRating = 0;
+            async function sendOpinion() {
+                const value = userRating;
+                const token = localStorage.getItem('jwt-token');
+                try{
+                    const response = await fetch(`http://quizzone.zapto.org:8000/api/quiz/${quizId}/addoreditopinion`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('jwt-token')}`
+                        },
+                        body: JSON.stringify({ value: value })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Błąd podczas pobierania komentarzy');
+                    }
+                }
+                catch{
+
+                }
+            }
+            // Dodanie zdarzeń kliknięcia do gwiazdek
+            const stars = document.querySelectorAll('#rating-stars i');
+            stars.forEach(star => {
+                star.addEventListener('click', function () {
+                    // Pobranie wartości z klikniętej gwiazdki
+                    userRating = parseInt(this.getAttribute('data-value'), 10);
+
+                    // Ustawienie aktywnych gwiazdek
+                    stars.forEach(s => s.classList.remove('active'));
+                    for (let i = 0; i < userRating; i++) {
+                        stars[i].classList.add('active');
+                    }
+                    sendOpinion();
+                    loadQuizInfo();
+                });
+            });
+
 
             // Funkcja do wczytania istniejących komentarzy
             async function loadComments() {

@@ -16,10 +16,11 @@
                 <div id="question-content"></div>
             </div>
             <div class="answer-ovl">
-                <div id="answerA" class="answer-btn"></div>
-                <div id="answerB" class="answer-btn"></div>
-                <div id="answerC" class="answer-btn"></div>
-                <div id="answerD" class="answer-btn"></div>
+                <div id="answerA" class="answer-btn" style="display: none;"></div>
+                <div id="answerB" class="answer-btn" style="display: none;"></div>
+                <div id="answerC" class="answer-btn" style="display: none;"></div>
+                <div id="answerD" class="answer-btn" style="display: none;"></div>
+                <div id="answer-open" style="display: none;"><input type="text" id="answer-open-value" class="game-input"><button class="answer-btn">Ok</button></div>
             </div>
 
         </div>
@@ -114,15 +115,30 @@
 
             document.getElementById('quiz-question').innerText = 'Pytanie nr '+(currentQuestionIndex+1);
             document.getElementById('question-content').innerText = question.content;
-            document.getElementById('answerA').innerText = question.answerA;
-            document.getElementById('answerB').innerText = question.answerB;
             if(question.isTrueOrFalse){
+                document.getElementById('answerA').style.display = 'block';
+                document.getElementById('answerB').style.display = 'block';
                 document.getElementById('answerC').style.display = 'none';
                 document.getElementById('answerD').style.display = 'none';
+                document.getElementById('answerA').innerText = question.answerA;
+                document.getElementById('answerB').innerText = question.answerB;
+                document.getElementById('answer-open').style.display = 'none';
+            }
+            else if(question.isOpen){
+                document.getElementById('answerA').style.display = 'none';
+                document.getElementById('answerB').style.display = 'none';
+                document.getElementById('answerC').style.display = 'none';
+                document.getElementById('answerD').style.display = 'none';
+                document.getElementById('answer-open').style.display = 'block';
             }
             else{
+                document.getElementById('answerA').style.display = 'block';
+                document.getElementById('answerB').style.display = 'block';
                 document.getElementById('answerC').style.display = 'block';
                 document.getElementById('answerD').style.display = 'block';
+                document.getElementById('answer-open').style.display = 'none';
+                document.getElementById('answerA').innerText = question.answerA;
+                document.getElementById('answerB').innerText = question.answerB;
                 document.getElementById('answerC').innerText = question.answerC;
                 document.getElementById('answerD').innerText = question.answerD;
             }
