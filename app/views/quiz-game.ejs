@@ -152,7 +152,8 @@
                         question_interval = null;
                         console.log('Nima');
                     }
-                    submitAnswer(question.id, button.innerText);
+                    if(question.isOpen) submitAnswer(question.id, document.getElementById('answer-open-value').value);
+                    else submitAnswer(question.id, button.innerText);
                 }
             });
         };
