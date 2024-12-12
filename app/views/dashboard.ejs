@@ -39,8 +39,10 @@
             count_points = $('.stats-details-value:eq(2)'),
             user_progressbar = $('.progressbar-bar-fill'),
             user_progress_text = $('.progressbar-text'),
-            user_tier = $('.mainuser-name-tier');
+            user_tier = $('.mainuser-name-tier'),
+            widget_achievements = $('.mainuser-dashboard-widget:eq(1)')
 
+            if(load_username(data.user.username)) console.log('ustawiono username..');
             if(data.user.level)level.html(data.user.level);
             if(data.user.solved)count_solved.html(data.user.solved);
             if(data.user.points)count_points.html(data.user.points);
@@ -55,8 +57,37 @@
             }
             if(data.user.have && data.user.nextLevel)user_progress_text.html(data.user.have + " / " + data.user.nextLevel + " XP");
 
+            if(data.user.allAchievements && data.user.userAchievements){
+                let ach_all = data.user.allAchievements,
+                    ach_user = data.user.userAchievements;
+                let ach_ratio = (parseFloat(ach_user)/parseFloat(ach_all))*100;
 
-            if(load_username(data.user.username)) console.log('set(username) sucess..');
+                widget_achievements.find('.widget-progressbar-bar-fill').css({'width':`${ach_ratio}%`});
+                widget_achievements.find('.widget-progressbar-text').text(`${ach_user}/${ach_all}`);
+            } 
+            if(data.user.achievements && data.user.achievements.length>0){
+                let html_content = ``;
+                let achievements = data.user.achievements;
+
+                achievements.forEach( achievement => {
+                    html_content+=`
+                    <div class='ach-item'>
+                        <div class='ach-top'>
+                            <div class='ach-ico'><i class='bx bxs-party'></i></div>
+                            <div class='ach-title'>${achievement.name}</div>
+                        </div>    
+                        <div class='ach-bottom'>
+                            <div class='ach-desc'>${achievement.description}</div>
+                        </div>
+                    </div>
+                    `;
+                });
+                widget_achievements.find('.widget-cnt-inside').html(html_content);
+
+
+            }
+
+
 
             return true;
         }   
@@ -234,6 +265,17 @@ document.addEventListener('click',(event)=> {
     }
 });        
 
+
+$('.widget-cnt-footer').on('click',function(){
+    if($(this).hasClass('active1')){
+        $(this).parent('.dashboard-widget-cnt').find('.widget-cnt-inside').css({'max-height':'200px'});
+        $(this).removeClass('active1');
+    }
+    else{
+        $(this).parent('.dashboard-widget-cnt').find('.widget-cnt-inside').css({'max-height':'unset'});
+        $(this).addClass('active1');
+    }
+});
 
     </script>
     
