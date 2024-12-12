@@ -10,6 +10,21 @@
     --orange-main:#ef846a;
     --green: #389171;
 }
+::-webkit-scrollbar-thumb {
+    background: #fff; 
+    border-radius: 6px;
+    
+}
+::-webkit-scrollbar{
+    width:6px;
+}
+::-webkit-scrollbar-track {
+    background: white;
+    border-radius: 6px;
+}
+
+
+
 @media (max-width: 950px){
 #ovl{
     width: calc(100% - 20px)!important;
@@ -151,6 +166,10 @@ body{
 }
 .active-opt, .active-opt a{
     color: var(--orange-main)!important;
+}
+.active1{
+    color:var(--subtext1)!important;
+
 }
 #left-sidebar{
     user-select:none;
@@ -339,4 +358,8 @@ body{
 .notify-close:hover{
 font-size:1.2em;
 cursor:pointer;
+}
+.widget-cnt-footer:hover{
+    cursor: pointer;
+    color: var(--subtext1);
 }
