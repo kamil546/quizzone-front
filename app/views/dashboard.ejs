@@ -57,7 +57,7 @@
             }
             if(data.user.have && data.user.nextLevel)user_progress_text.html(data.user.have + " / " + data.user.nextLevel + " XP");
 
-            if(data.user.allAchievements && data.user.userAchievements){
+            if(data.user.allAchievements && (data.user.userAchievements * 1 == data.user.userAchievements)){
                 let ach_all = data.user.allAchievements,
                     ach_user = data.user.userAchievements;
                 let ach_ratio = (parseFloat(ach_user)/parseFloat(ach_all))*100;
@@ -83,16 +83,32 @@
                     `;
                 });
                 widget_achievements.find('.widget-cnt-inside').html(html_content);
-
-
             }
+            return true;
+        }
+        function loadLastQuizzes(data){
+            const widget_proponowane = $('.mainuser-dashboard-widget:eq(0)');
 
+            let html_content = ``;
 
+            data.quizes.forEach( quiz => {
+                html_content+=`
+                <div class='lastQuiz-item'>
+                    <div class='lastQuiz-top'>
+                        <div class='lastQuiz-ico'><i class='bx bxl-sketch' ></i></div>
+                        <div class='lastQuiz-title'>${quiz.quiz_name}</div>
+                    </div>    
+                    <div class='lastQuiz-bottom'>
+                        <div class='lastQuiz-desc'>Punktów: ${quiz.score}</div>
+                        <div class="lastQuiz-btn"><a href='/show-quiz/${quiz.quiz_id}'> Zobacz quiz</a></div>
+                    </div>
+                </div>
+                `;
+            });
+            widget_proponowane.find('.widget-cnt-inside').html(html_content);
 
             return true;
-        }   
-
-
+        }
     </script>
 </head>
 <body>
@@ -164,13 +180,7 @@
 
             <div class="mainuser-dashboard-widget">
                 <div class="dashboard-widget-top">
-                    <div class="widget-top-title">Proponowane</div>
-                    <div class="widget-top-progressbar">
-                        <div class="widget-progressbar-text">1/100</div>
-                        <div class="widget-progressbar-bar">
-                            <div class="widget-progressbar-bar-fill"></div>
-                        </div>
-                    </div>
+                    <div class="widget-top-title">Ostatnie</div>
                 </div>
                 <div class="dashboard-widget-cnt">
                     <div class="widget-cnt-inside">
@@ -214,8 +224,6 @@
 
         
         document.addEventListener('DOMContentLoaded', async function() {
-
-
             const token = localStorage.getItem('jwt-token');
             try {
                 const response = await fetch('http://quizzone.zapto.org:8000/api/user', {
@@ -244,14 +252,40 @@
                     $('.cat-cnt').show();
                     console.log('nie zaladowano..');
                 }
-
-
-
-
             } catch (error) {
                 console.error('Error fetching quizzes:', error);
                 const quizList = document.getElementById('quizList');
                 quizList.innerHTML = '<li class="text-danger">Wystąpił błąd podczas pobierania quizów.</li>'; 
+            }
+
+            //ładowanie poprzednich robionych quizów przez użytkownika
+            try {
+                const response = await fetch('http://quizzone.zapto.org:8000/api/user/lastquizzes', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to fetch lastquizzes');
+                }
+                
+                const data = await response.json();
+
+
+                if(await loadLastQuizzes(data)){
+                    console.log('zaladowano ostatnich qiuzów..');
+                    //$('.cat-cnt').show();
+                }
+                else{
+                    //$('.cat-cnt').show();
+                    console.log('nie zaladowano ostanich quizów..');
+                }
+            } catch (error) {
+                console.error('Error fetching lastquizzes:', error);
+
+                $('.mainuser-dashboard-widget:eq(0)').find('.widget-progressbar-text').text(`nie ma`);
             }
 
             
